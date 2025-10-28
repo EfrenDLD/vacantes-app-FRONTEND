@@ -6,11 +6,11 @@ Este proyecto implementa una arquitectura **REST**, comunicándose con el **back
 ---
 
 ## Estructura a seguir en el repositorio
+   La nomenclatura para componentes y archivos es **PascalCase** (por ejemplo: `VacanteCard.jsx`, `LoginForm.jsx`).
+   La estructura de carpetas del proyecto se organiza de la siguiente manera:
 
-La nomenclatura para componentes y archivos es **PascalCase** (por ejemplo: `VacanteCard.jsx`, `LoginForm.jsx`).
 
-La estructura de carpetas del proyecto se organiza de la siguiente manera:
-
+```
 vacantes-app-frontend/
 ├── public/                   # Archivos públicos como index.html, favicon, etc.
 │   └── index.html            # Archivo principal de HTML
@@ -31,8 +31,7 @@ vacantes-app-frontend/
 ├── .gitignore                # Archivos a ignorar por Git
 ├── package.json              # Dependencias y scripts
 └── README.md                 # Documentación del proyecto
-
----
+```
 
 ## Descripción de cada carpeta
 
@@ -41,7 +40,7 @@ Contiene los archivos públicos que no se procesan por Vite, como `index.html` y
 
 ### **src/**
 Directorio principal del código fuente.
-
+```
 - **api/** → Configura la conexión con la API (Axios, endpoints base).
 - **assets/** → Contiene recursos estáticos (imágenes, íconos, fuentes, estilos).
 - **components/** → Componentes reutilizables como `Navbar`, `Footer`, `VacanteCard`, etc.
@@ -52,9 +51,7 @@ Directorio principal del código fuente.
 - **routes/** → Configuración de rutas de la aplicación usando `react-router-dom`.
 - **services/** → Funciones que manejan las peticiones HTTP hacia el backend REST (por ejemplo: `VacantesService`, `AuthService`).
 - **utils/** → Funciones utilitarias y helpers (validaciones, formateo de datos, etc.).
-
-
----
+```
 
 ## Tecnologías principales
 
