@@ -12,28 +12,25 @@ La nomenclatura para componentes y archivos es **PascalCase** (por ejemplo: `Vac
 La estructura de carpetas del proyecto se organiza de la siguiente manera:
 
 vacantes-app-frontend/
-├── public/ # Archivos públicos como index.html, favicon, etc.
-│ └── index.html # Archivo principal HTML
-│
-├── src/ # Código fuente de la aplicación
-│ ├── api/ # Configuración de Axios y endpoints base
-│ ├── assets/ # Recursos estáticos (imágenes, estilos, íconos)
-│ ├── components/ # Componentes reutilizables y UI
-│ ├── contexts/ # Contextos globales (AuthContext, etc.)
-│ ├── hooks/ # Custom hooks reutilizables
-│ ├── layouts/ # Layouts generales de la aplicación
-│ ├── pages/ # Páginas o vistas principales
-│ ├── routes/ # Configuración de rutas (React Router)
-│ ├── services/ # Servicios para manejar llamadas a la API REST
-│ ├── utils/ # Funciones y helpers reutilizables
-│ ├── App.jsx # Componente raíz de la aplicación
-│ ├── index.css # Estilos globales
-│ └── main.jsx # Punto de entrada (ReactDOM.render)
-│
-├── .env # Variables de entorno (e.g. VITE_API_URL)
-├── .gitignore # Archivos y carpetas ignoradas por Git
-├── package.json # Dependencias, scripts y metadatos del proyecto
-└── README.md # Documentación del proyecto
+├── public/                   # Archivos públicos como index.html, favicon, etc.
+│   └── index.html            # Archivo principal de HTML
+├── src/                      # Código fuente de la aplicación
+│   ├── assets/               # Recursos estáticos como imágenes, estilos, etc.
+│   ├── components/           # Componentes reutilizables
+│   ├── hooks/                # Custom hooks
+│   ├── layouts/              # Layouts generales de la app
+│   ├── pages/                # Páginas o vistas principales
+│   ├── services/             # Servicios para manejar API calls
+│   ├── store/                # Configuración de estado global (e.g., Redux, Context)
+│   ├── utils/                # Funciones y utilidades
+│   ├── App.js                # Componente principal de la aplicación
+|   ├── index.css             # CSS 
+│   ├── index.js              # Punto de entrada de la aplicación
+│   └── routes.js             # Configuración de rutas
+├── .env                      # Variables de entorno
+├── .gitignore                # Archivos a ignorar por Git
+├── package.json              # Dependencias y scripts
+└── README.md                 # Documentación del proyecto
 
 ---
 
@@ -55,6 +52,7 @@ Directorio principal del código fuente.
 - **routes/** → Configuración de rutas de la aplicación usando `react-router-dom`.
 - **services/** → Funciones que manejan las peticiones HTTP hacia el backend REST (por ejemplo: `VacantesService`, `AuthService`).
 - **utils/** → Funciones utilitarias y helpers (validaciones, formateo de datos, etc.).
+
 
 ---
 
@@ -95,9 +93,9 @@ Directorio principal del código fuente.
 
 ## Buenas prácticas
 
-Mantén la nomenclatura PascalCase para componentes (VacanteForm.jsx).
-Usa camelCase para funciones y variables (getVacantes, handleSubmit).
-Evita lógica de negocio dentro de los componentes:
-usa services/ y hooks/ para mantener un código limpio y escalable.
-Usa el archivo .env para configurar la URL del backend y otros parámetros sensibles.
+- Mantén la nomenclatura PascalCase para componentes (VacanteForm.jsx).
+- Usa camelCase para funciones y variables (getVacantes, handleSubmit).
+- Evita lógica de negocio dentro de los componentes:
+- usa services/ y hooks/ para mantener un código limpio y escalable.
+- Usa el archivo .env para configurar la URL del backend y otros parámetros sensibles.
 
