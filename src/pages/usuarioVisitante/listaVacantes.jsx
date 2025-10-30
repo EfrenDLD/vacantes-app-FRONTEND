@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const initialVacantes = [
   { id: '1', titulo: 'Nombre vacante 1', publicado: '2025-10-30' },
@@ -17,49 +17,33 @@ export default function ListaVacantes() {
     setVacantes(q ? initialVacantes.filter(v => v.titulo.toLowerCase().includes(q)) : initialVacantes);
   };
 
-  const handleEliminar = (id) => {
-    setVacantes(vacantes.filter(v => v.id !== id));
-  };
-
   return (
-    <div className="container">
-      <div className="masthead">
-        <h3 className="text-muted">My Company</h3>
-        <nav>
-          <ul className="nav nav-justified">
-            <li><a href="#inicio">Inicio</a></li>
-            <li><a href="#admin">Administración</a></li>
-            <li><a href="#acerca">Acerca</a></li>
-          </ul>
-        </nav>
-      </div>
-
-      <form className="navbar-form navbar-right" onSubmit={handleSearch}>
-        <div className="form-group">
+    <div className="container-fluid py-3">
+      <div className="d-flex justify-content-end mb-3">
+        <form className="d-flex" onSubmit={handleSearch}>
           <input
             type="text"
             name="query"
             required
             placeholder="Buscar oferta..."
-            className="form-control"
+            className="form-control me-2"
+            style={{ maxWidth: 300 }}
             value={query}
             onChange={e => setQuery(e.target.value)}
           />
-        </div>
-        <button type="submit" className="btn btn-success">Buscar</button>
-      </form>
+          <button type="submit" className="btn btn-success">Buscar</button>
+        </form>
+      </div>
 
-      <br /><br /><br />
-
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <h3 className="panel-title"><b>Lista de Vacantes</b></h3>
+      <div className="card">
+        <div className="card-header">
+          <h5 className="mb-0"><b>Lista de Vacantes</b></h5>
         </div>
-        <div className="panel-body">
-          <table className="table table-striped">
+        <div className="card-body p-0">
+          <table className="table table-striped mb-0">
             <thead>
               <tr>
-                <th className="left">ID</th>
+                <th>ID</th>
                 <th>Vacante</th>
                 <th>Publicado</th>
                 <th></th>
@@ -68,23 +52,28 @@ export default function ListaVacantes() {
             <tbody>
               {vacantes.map(v => (
                 <tr key={v.id}>
-                  <td className="left">{v.id}</td>
+                  <td>{v.id}</td>
                   <td>{v.titulo}</td>
                   <td>{v.publicado}</td>
                   <td>
-                    <button className="btn btn-default" onClick={() => alert('Ver detalles: ' + v.id)}>Ver Detalles</button>{' '}
-                    <button className="btn btn-default" onClick={() => handleEliminar(v.id)}>Eliminar</button>
+                    <button
+                      className="btn btn-sm btn-light border border-secondary text-dark"
+                      onClick={() => alert('Ver detalles: ' + v.id)}
+                    >
+                      Ver Detalles
+                    </button>
                   </td>
                 </tr>
               ))}
+              {vacantes.length === 0 && (
+                <tr>
+                  <td colSpan="4" className="text-center py-3">No hay vacantes</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
       </div>
-
-      <footer className="footer">
-        <p>&copy; 2016 My Company, Inc.</p>
-      </footer>
     </div>
   );
 }
