@@ -1,14 +1,12 @@
 
 import './App.css'
+import AppRoutes from './Routes.jsx';
 
 function App() {
 
   return (
     <>
-      <div>
-          <h1>PONGANSE A CHAMBEAR</h1>
-         <a></a>
-      </div>
+      <AppRoutes/>
     </>
   )
 }
