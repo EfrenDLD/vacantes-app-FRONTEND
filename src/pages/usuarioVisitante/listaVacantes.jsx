@@ -2,9 +2,16 @@ import React, { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const initialVacantes = [
-  { id: '1', titulo: 'Nombre vacante 1', publicado: '2025-10-30' },
-  { id: '2', titulo: 'Nombre vacante 2', publicado: '2025-10-25' },
-  { id: '3', titulo: 'Nombre vacante 3', publicado: '2025-10-20' },
+  { id: '1', titulo: 'Ingeniero de Software Senior (Backend)', publicado: '2025-10-15' },
+  { id: '2', titulo: 'Desarrollador Frontend (React)', publicado: '2025-10-10' },
+  { id: '3', titulo: 'Ingeniero DevOps', publicado: '2025-09-30' },
+  { id: '4', titulo: 'Desarrollador Full Stack (React/Node)', publicado: '2025-10-01' },
+  { id: '5', titulo: 'Ingeniero de Datos', publicado: '2025-09-25' },
+  { id: '6', titulo: 'QA Automation Engineer', publicado: '2025-10-05' },
+  { id: '7', titulo: 'Desarrollador Mobile (React Native)', publicado: '2025-10-12' },
+  { id: '8', titulo: 'UX/UI Designer', publicado: '2025-10-08' },
+  { id: '9', titulo: 'Product Manager (Plataforma)', publicado: '2025-09-20' },
+  { id: '10', titulo: 'Ingeniero de Seguridad - Aplicaciones', publicado: '2025-10-02' }
 ];
 
 export default function ListaVacantes() {
@@ -58,7 +65,6 @@ export default function ListaVacantes() {
                   <td>
                     <button
                       className="btn btn-sm btn-light border border-secondary text-dark"
-                      onClick={() => alert('Ver detalles: ' + v.id)}
                     >
                       Ver Detalles
                     </button>
