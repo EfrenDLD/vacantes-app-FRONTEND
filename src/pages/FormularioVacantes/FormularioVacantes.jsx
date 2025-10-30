@@ -1,4 +1,5 @@
 import { NavAdmin } from "../../components/NavAdmin/NavAdmin"
+import { Footer } from "../../components/Footer/Footer";
 
 export const FormularioVacante = () => {
     return (
@@ -59,6 +60,7 @@ export const FormularioVacante = () => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     )
 }
