@@ -10,8 +10,6 @@ const initialVacantes = [
   { id: '6', titulo: 'QA Automation Engineer', publicado: '2025-10-05' },
   { id: '7', titulo: 'Desarrollador Mobile (React Native)', publicado: '2025-10-12' },
   { id: '8', titulo: 'UX/UI Designer', publicado: '2025-10-08' },
-  { id: '9', titulo: 'Product Manager (Plataforma)', publicado: '2025-09-20' },
-  { id: '10', titulo: 'Ingeniero de Seguridad - Aplicaciones', publicado: '2025-10-02' }
 ];
 
 export default function ListaVacantes() {

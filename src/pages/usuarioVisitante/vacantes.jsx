@@ -1,10 +1,13 @@
+import { NavAdmin } from "../../components/NavAdmin/NavAdmin";
 import ListaVacantes from "./listaVacantes";
 
 export default function Vacantes() {
   return (
-    <div style={{width:'200%', justifyContent:'center', marginLeft:'-50%'}}>
-      <h1 className="text-black p-3">My Company</h1>
-      <ListaVacantes />
+    <div className="d-flex flex-column align-items-center">
+      <NavAdmin></NavAdmin>
+      <div className="w-75 h-50 p-4">
+        <ListaVacantes />
+      </div>
     </div>
   );
 }
