@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
+import { PaginacionVacantes } from '../../components/paginacionVacantes/paginacionVacantes';
 
 const initialVacantes = [
   { id: '1', titulo: 'Ingeniero de Software Senior (Backend)', publicado: '2025-10-15' },
@@ -15,11 +16,24 @@ const initialVacantes = [
 export default function ListaVacantes() {
   const [query, setQuery] = useState('');
   const [vacantes, setVacantes] = useState(initialVacantes);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const vacantesPorPagina = 6;
 
   const handleSearch = (e) => {
     e.preventDefault();
     const q = query.trim().toLowerCase();
     setVacantes(q ? initialVacantes.filter(v => v.titulo.toLowerCase().includes(q)) : initialVacantes);
+    setPaginaActual(1);
+  };
+
+  const totalPaginas = Math.ceil(vacantes.length / vacantesPorPagina);
+  const displayedVacantes = vacantes.slice((paginaActual - 1) * vacantesPorPagina, paginaActual * vacantesPorPagina);
+
+  console.log('vacantes:', vacantes.length, 'displayedVacantes:', displayedVacantes.length, 'paginaActual:', paginaActual, 'totalPaginas:', totalPaginas);
+
+  const handlePageChange = (newPage) => {
+    console.log('Cambiando a página:', newPage);
+    setPaginaActual(newPage);
   };
 
   return (
@@ -55,7 +69,7 @@ export default function ListaVacantes() {
               </tr>
             </thead>
             <tbody>
-              {vacantes.map(v => (
+              {displayedVacantes.map(v => (
                 <tr key={v.id}>
                   <td>{v.id}</td>
                   <td>{v.titulo}</td>
@@ -63,13 +77,14 @@ export default function ListaVacantes() {
                   <td>
                     <button
                       className="btn btn-sm btn-light border border-secondary text-dark"
+                      onClick={() => alert('Ver detalles: ' + v.id)}
                     >
                       Ver Detalles
                     </button>
                   </td>
                 </tr>
               ))}
-              {vacantes.length === 0 && (
+              {displayedVacantes.length === 0 && (
                 <tr>
                   <td colSpan="4" className="text-center py-3">No hay vacantes</td>
                 </tr>
@@ -78,6 +93,13 @@ export default function ListaVacantes() {
           </table>
         </div>
       </div>
+      {totalPaginas > 1 && (
+        <PaginacionVacantes
+          paginaActual={paginaActual}
+          totalPaginas={totalPaginas}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 }

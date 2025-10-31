@@ -3,6 +3,7 @@ import { FormularioVacante } from "./pages/FormularioVacantes/FormularioVacantes
 import { NavAdmin } from "./components/NavAdmin/NavAdmin.jsx";
 import ListaVacantes from "./pages/usuarioVisitante/listaVacantes";
 import Vacantes from "./pages/usuarioVisitante/vacantes";
+import { PaginacionVacantes } from "./components/paginacionVacantes/paginacionVacantes.jsx";
 
 const AppRoutes = () => {
   return (
@@ -11,6 +12,7 @@ const AppRoutes = () => {
         <Route path="/formularioVacante" element={<FormularioVacante />} />  
         <Route path="/listaVacantes" element={<ListaVacantes />} />
         <Route path="/vacantes" element={<Vacantes />} />
+        <Route path="/paginacion" element={<PaginacionVacantes />} />
 
     </Routes>
   );
