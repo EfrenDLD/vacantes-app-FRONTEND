@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Swal from "sweetalert2";
-import "../../styles/usuarioAdministrador/ListarVacantesAdministrador.css";
 
 export const ListarVacantesAdministrador = () => {
   const [vacantes, setVacantes] = useState([]);
@@ -74,13 +73,13 @@ export const ListarVacantesAdministrador = () => {
   const vacantesInactivas = vacantes.filter((v) => v.estado === "Inactiva");
 
   const renderTabla = (lista, titulo) => (
-    <div className="panel panel-default my-4">
-      <div className="panel-heading p-2">
-        <h4 className="panel-title m-0">{titulo}</h4>
+    <div className="panel panel-default shadow-sm rounded p-3 mb-5 bg-white">
+      <div className="panel-heading mb-3 border-bottom pb-2">
+        <h4 className="panel-title text-secondary m-0">{titulo}</h4>
       </div>
-      <div className="panel-body p-3">
-        <table className="table table-striped">
-          <thead>
+      <div className="panel-body">
+        <table className="table table-striped table-hover align-middle">
+          <thead className="table-light">
             <tr>
               <th>ID</th>
               <th>Vacante</th>
@@ -102,11 +101,9 @@ export const ListarVacantesAdministrador = () => {
                     >
                       {v.estado === "Activa" ? "Desactivar" : "Activar"}
                     </button>
-
                     <button className="btn btn-secondary btn-sm me-2">
                       Ver Detalles
                     </button>
-
                     <button
                       className="btn btn-danger btn-sm"
                       onClick={() => handleEliminar(v.id)}
@@ -118,7 +115,9 @@ export const ListarVacantesAdministrador = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="text-center">No hay vacantes registradas.</td>
+                <td colSpan="4" className="text-center text-muted py-3">
+                  No hay vacantes registradas.
+                </td>
               </tr>
             )}
           </tbody>
@@ -128,7 +127,7 @@ export const ListarVacantesAdministrador = () => {
   );
 
   return (
-    <div className="container my-4">
+    <div className="container my-5">
       {renderTabla(vacantesActivas, "Vacantes Activas")}
       {renderTabla(vacantesInactivas, "Vacantes Inactivas")}
     </div>
