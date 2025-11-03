@@ -1,11 +1,42 @@
-import { NavAdmin } from "../../components/NavAdmin/NavAdmin"
+import { useState } from "react";
+import { NavAdmin } from "../../components/NavAdmin/NavAdmin";
 
-export const FormularioVacante = () => {
+export const FormularioVacante = ({ guardar }) => {
+    // ********************************** DEFINICION DE VARIABLES  *****************************************
+    const [estado, setEstado] = useState("inactivo");
+    // *******************************  INICIALIZANDO LOS FORMULARIOS **************************************
+    const formularioInicialVacantes = {
+        fechaPublicacion: "",
+        nombre: "",
+        descripcion: "",
+        detalle: "",
+        activo: ""
+    }
+
+    const [datosFormularioVacantes, setDatosFormularioVacantes] = useState(formularioInicialVacantes);
+
+    // **********************************  OBTENER DATOS DE LA BD  *****************************************
+    // ********************************** USE EFFECTS **********************************
+    // **********************************  MANEJADORES DE CAMBIOS  *****************************************
+    const actualizarCamposVacante = (e) => {
+        const {name, value} = e.target;
+        setDatosFormularioVacantes((prevData) =>({
+            ...prevData,
+            [name]: name
+        }))
+    }
+    // ******************************* FUNCIONES GENERALES *******************************************
+    // ********************  SE ENVIAN LOS DATOS DEL FORMULARIO PARA SER GUARDADOS  ************************
+    // ***********************************  VALIDACION DE CAMPOS  ******************************************
+    // **************************  FUNCIONES PARA MOSTRAR MENSAJES AL USUARIO  *****************************
+
+
+
     return (
         <div className="w-100">
             <NavAdmin />
             <div className="d-flex justify-content-center">
-                <div className="col-12 card border-secondary w-75 mt-5  text-start">
+                <div className="col-12 card border-secondary w-75 mt-5 text-start">
                     <div className="card-header bg-light">
                         <h5 className="card-title">Crear Vacante</h5>
                     </div>
@@ -52,6 +83,40 @@ export const FormularioVacante = () => {
                                 ></textarea>
                             </div>
 
+                            <div className="mb-3">
+                                <label className="fw-bolder">Estado:</label>
+
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        name="estado"
+                                        id="radioActivo"
+                                        value="activo"
+                                        checked={estado === "activo"}
+                                        onChange={() => setEstado("activo")}
+                                    />
+                                    <label className="form-check-label" htmlFor="radioActivo">
+                                        Activo
+                                    </label>
+                                </div>
+
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        name="estado"
+                                        id="radioInactivo"
+                                        value="inactivo"
+                                        checked={estado === "inactivo"}
+                                        onChange={() => setEstado("inactivo")}
+                                    />
+                                    <label className="form-check-label" htmlFor="radioInactivo">
+                                        Inactivo
+                                    </label>
+                                </div>
+                            </div>
+
                             <button type="submit" className="btn btn-secondary">
                                 Guardar
                             </button>
@@ -60,5 +125,5 @@ export const FormularioVacante = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
