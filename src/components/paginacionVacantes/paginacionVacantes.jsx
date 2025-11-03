@@ -4,6 +4,8 @@ export const PaginacionVacantes = ({ currentPage, totalPages, onPageChange }) =>
     pages.push(i);
   }
 
+  console.log('PaginacionVacantes - currentPage:', currentPage, 'totalPages:', totalPages);
+
   return (
     <div className="d-flex justify-content-center mt-4">
       <nav aria-label="Page navigation">
