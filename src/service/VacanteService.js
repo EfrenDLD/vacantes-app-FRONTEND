@@ -1,6 +1,6 @@
 import axiosInstance from '../api/axiosConfig';
 
-const API_URL = '/alumno';
+const API_URL = '/vacantes';
 
 const create = async (params) => {
   try {
@@ -12,5 +12,5 @@ const create = async (params) => {
 };
 
 export default {
-    create
+  create
 }
