@@ -97,12 +97,16 @@ export const ListarVacantesAdministrador = () => {
                   <td>{v.fecha}</td>
                   <td>
                     <button
-                      className={`btn btn-default btn-sm me-2`}
+                      className="btn btn-secondary btn-sm me-2"
                       onClick={() => handleCambiarEstado(v)}
                     >
                       {v.estado === "Activa" ? "Desactivar" : "Activar"}
                     </button>
-                    <button className="btn btn-default btn-sm me-2">Ver Detalles</button>
+
+                    <button className="btn btn-secondary btn-sm me-2">
+                      Ver Detalles
+                    </button>
+
                     <button
                       className="btn btn-danger btn-sm"
                       onClick={() => handleEliminar(v.id)}
