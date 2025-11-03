@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Swal from "sweetalert2";
 import { PaginacionVacantes } from "../../components/paginacionVacantes/paginacionVacantes";
 import { NavAdmin } from "../../components/NavAdmin/NavAdmin";
+import vacanteService from "../../service/VacanteService";
 
 export const ListarVacantesAdministrador = () => {
   const [vacantes, setVacantes] = useState([]);
