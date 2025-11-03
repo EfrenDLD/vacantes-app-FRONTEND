@@ -18,11 +18,16 @@ export const ListarVacantesAdministrador = () => {
   const obtenerVacantes = async () => {
     try {
       const data = await vacanteService.getAll();
-      // Convertimos la fecha si viene como string
+      if (!Array.isArray(data)) {
+        setVacantes([]);
+        return;
+      }
       const vacantesFormateadas = data.map(v => ({
         ...v,
-        fecha: v.fechaPublicacion ? new Date(v.fechaPublicacion).toLocaleDateString() : "",
-        estado: v.activo ? "Activa" : "Inactiva"
+        fecha: v.fechaPublicacion
+          ? new Date(v.fechaPublicacion).toLocaleDateString()
+          : "",
+        estado: v.activo ? "Activa" : "Inactiva",
       }));
       setVacantes(vacantesFormateadas);
     } catch (error) {
@@ -169,10 +174,8 @@ export const ListarVacantesAdministrador = () => {
 
   return (
     <div className="container my-5">
-      {/* --- Nav --- */}
       <NavAdmin />
 
-      {/* --- Tablas de vacantes --- */}
       {renderTabla(
         vacantesActivasPaginadas,
         "Vacantes Activas",
