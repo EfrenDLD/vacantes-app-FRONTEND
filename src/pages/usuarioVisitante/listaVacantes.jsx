@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import { PaginacionVacantes } from '../../components/paginacionVacantes/paginacionVacantes';
+import { PaginacionVacantes } from "../../components/paginacionVacantes/paginacionVacantes";
 
 const initialVacantes = [
   { id: '1', titulo: 'Ingeniero de Software Senior (Backend)', publicado: '2025-10-15' },
@@ -16,24 +16,21 @@ const initialVacantes = [
 export default function ListaVacantes() {
   const [query, setQuery] = useState('');
   const [vacantes, setVacantes] = useState(initialVacantes);
-  const [paginaActual, setPaginaActual] = useState(1);
-  const vacantesPorPagina = 6;
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   const handleSearch = (e) => {
     e.preventDefault();
     const q = query.trim().toLowerCase();
     setVacantes(q ? initialVacantes.filter(v => v.titulo.toLowerCase().includes(q)) : initialVacantes);
-    setPaginaActual(1);
+    setCurrentPage(1); // reset a página 1 al buscar
   };
 
-  const totalPaginas = Math.ceil(vacantes.length / vacantesPorPagina);
-  const displayedVacantes = vacantes.slice((paginaActual - 1) * vacantesPorPagina, paginaActual * vacantesPorPagina);
+  const totalPages = Math.ceil(vacantes.length / itemsPerPage);
+  const displayedVacantes = vacantes.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  console.log('vacantes:', vacantes.length, 'displayedVacantes:', displayedVacantes.length, 'paginaActual:', paginaActual, 'totalPaginas:', totalPaginas);
-
-  const handlePageChange = (newPage) => {
-    console.log('Cambiando a página:', newPage);
-    setPaginaActual(newPage);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -93,10 +90,11 @@ export default function ListaVacantes() {
           </table>
         </div>
       </div>
-      {totalPaginas > 1 && (
+
+      {totalPages > 1 && (
         <PaginacionVacantes
-          paginaActual={paginaActual}
-          totalPaginas={totalPaginas}
+          currentPage={currentPage}
+          totalPages={totalPages}
           onPageChange={handlePageChange}
         />
       )}
