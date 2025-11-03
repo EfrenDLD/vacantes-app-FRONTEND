@@ -15,29 +15,24 @@ export const ListarVacantesAdministrador = () => {
     obtenerVacantes();
   }, []);
 
-  const obtenerVacantes = () => {
-    setVacantes([
-      { id: 1, nombre: "Desarrollador Frontend", fecha: "2025-10-30", estado: "Activa" },
-      { id: 2, nombre: "Diseñador UX/UI", fecha: "2025-10-28", estado: "Inactiva" },
-      { id: 3, nombre: "Administrador de Sistemas", fecha: "2025-10-25", estado: "Activa" },
-      { id: 4, nombre: "Tester QA", fecha: "2025-10-22", estado: "Inactiva" },
-      { id: 5, nombre: "Analista de Datos", fecha: "2025-10-20", estado: "Activa" },
-      { id: 6, nombre: "Soporte Técnico", fecha: "2025-10-18", estado: "Inactiva" },
-      { id: 7, nombre: "Ingeniero DevOps", fecha: "2025-10-17", estado: "Activa" },
-      { id: 8, nombre: "Project Manager", fecha: "2025-10-15", estado: "Inactiva" },
-      { id: 9, nombre: "Desarrollador Backend", fecha: "2025-10-12", estado: "Activa" },
-      { id: 10, nombre: "Especialista en Seguridad", fecha: "2025-10-10", estado: "Inactiva" },
-      { id: 11, nombre: "Desarrollador Frontend", fecha: "2025-10-30", estado: "Activa" },
-      { id: 12, nombre: "Diseñador UX/UI", fecha: "2025-10-28", estado: "Inactiva" },
-      { id: 13, nombre: "Administrador de Sistemas", fecha: "2025-10-25", estado: "Activa" },
-      { id: 14, nombre: "Tester QA", fecha: "2025-10-22", estado: "Inactiva" },
-      { id: 15, nombre: "Analista de Datos", fecha: "2025-10-20", estado: "Activa" },
-      { id: 16, nombre: "Soporte Técnico", fecha: "2025-10-18", estado: "Inactiva" },
-      { id: 17, nombre: "Ingeniero DevOps", fecha: "2025-10-17", estado: "Activa" },
-      { id: 18, nombre: "Project Manager", fecha: "2025-10-15", estado: "Inactiva" },
-      { id: 19, nombre: "Desarrollador Backend", fecha: "2025-10-12", estado: "Activa" },
-      { id: 20, nombre: "Especialista en Seguridad", fecha: "2025-10-10", estado: "Inactiva" },
-    ]);
+  const obtenerVacantes = async () => {
+    try {
+      const data = await vacanteService.getAll();
+      // Convertimos la fecha si viene como string
+      const vacantesFormateadas = data.map(v => ({
+        ...v,
+        fecha: v.fechaPublicacion ? new Date(v.fechaPublicacion).toLocaleDateString() : "",
+        estado: v.activo ? "Activa" : "Inactiva"
+      }));
+      setVacantes(vacantesFormateadas);
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al obtener vacantes",
+        text: error.toString(),
+      });
+    }
   };
 
   // --- Funciones para cambiar estado y eliminar ---

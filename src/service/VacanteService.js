@@ -2,7 +2,6 @@ import axiosInstance from '../api/axiosConfig';
 
 const API_URL = '/alumno';
 
-
 const getAll = async () => {
   try {
     const response = await axiosInstance.get(API_URL);
