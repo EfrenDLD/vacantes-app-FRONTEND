@@ -1,90 +1,103 @@
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { PaginacionVacantes } from "../../components/paginacionVacantes/paginacionVacantes";
 
 const initialVacantes = [
-  { id: '1', titulo: 'Nombre vacante 1', publicado: '2025-10-30' },
-  { id: '2', titulo: 'Nombre vacante 2', publicado: '2025-10-25' },
-  { id: '3', titulo: 'Nombre vacante 3', publicado: '2025-10-20' },
+  { id: '1', titulo: 'Ingeniero de Software Senior (Backend)', publicado: '2025-10-15' },
+  { id: '2', titulo: 'Desarrollador Frontend (React)', publicado: '2025-10-10' },
+  { id: '3', titulo: 'Ingeniero DevOps', publicado: '2025-09-30' },
+  { id: '4', titulo: 'Desarrollador Full Stack (React/Node)', publicado: '2025-10-01' },
+  { id: '5', titulo: 'Ingeniero de Datos', publicado: '2025-09-25' },
+  { id: '6', titulo: 'QA Automation Engineer', publicado: '2025-10-05' },
+  { id: '7', titulo: 'Desarrollador Mobile (React Native)', publicado: '2025-10-12' },
+  { id: '8', titulo: 'UX/UI Designer', publicado: '2025-10-08' },
 ];
 
 export default function ListaVacantes() {
   const [query, setQuery] = useState('');
   const [vacantes, setVacantes] = useState(initialVacantes);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   const handleSearch = (e) => {
     e.preventDefault();
     const q = query.trim().toLowerCase();
     setVacantes(q ? initialVacantes.filter(v => v.titulo.toLowerCase().includes(q)) : initialVacantes);
+    setCurrentPage(1); // reset a página 1 al buscar
   };
 
-  const handleEliminar = (id) => {
-    setVacantes(vacantes.filter(v => v.id !== id));
+  const totalPages = Math.ceil(vacantes.length / itemsPerPage);
+  const displayedVacantes = vacantes.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
-    <div className="container">
-      <div className="masthead">
-        <h3 className="text-muted">My Company</h3>
-        <nav>
-          <ul className="nav nav-justified">
-            <li><a href="#inicio">Inicio</a></li>
-            <li><a href="#admin">Administración</a></li>
-            <li><a href="#acerca">Acerca</a></li>
-          </ul>
-        </nav>
-      </div>
-
-      <form className="navbar-form navbar-right" onSubmit={handleSearch}>
-        <div className="form-group">
+    <div className="container-fluid py-3">
+      <div className="d-flex justify-content-end mb-3">
+        <form className="d-flex" onSubmit={handleSearch}>
           <input
             type="text"
             name="query"
             required
             placeholder="Buscar oferta..."
-            className="form-control"
+            className="form-control me-2"
+            style={{ maxWidth: 300 }}
             value={query}
             onChange={e => setQuery(e.target.value)}
           />
-        </div>
-        <button type="submit" className="btn btn-success">Buscar</button>
-      </form>
+          <button type="submit" className="btn btn-success">Buscar</button>
+        </form>
+      </div>
 
-      <br /><br /><br />
-
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <h3 className="panel-title"><b>Lista de Vacantes</b></h3>
+      <div className="card">
+        <div className="card-header">
+          <h5 className="mb-0"><b>Lista de Vacantes</b></h5>
         </div>
-        <div className="panel-body">
-          <table className="table table-striped">
+        <div className="card-body p-0">
+          <table className="table table-striped mb-0">
             <thead>
               <tr>
-                <th className="left">ID</th>
+                <th>ID</th>
                 <th>Vacante</th>
                 <th>Publicado</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {vacantes.map(v => (
+              {displayedVacantes.map(v => (
                 <tr key={v.id}>
-                  <td className="left">{v.id}</td>
+                  <td>{v.id}</td>
                   <td>{v.titulo}</td>
                   <td>{v.publicado}</td>
                   <td>
-                    <button className="btn btn-default" onClick={() => alert('Ver detalles: ' + v.id)}>Ver Detalles</button>{' '}
-                    <button className="btn btn-default" onClick={() => handleEliminar(v.id)}>Eliminar</button>
+                    <button
+                      className="btn btn-sm btn-light border border-secondary text-dark"
+                      onClick={() => alert('Ver detalles: ' + v.id)}
+                    >
+                      Ver Detalles
+                    </button>
                   </td>
                 </tr>
               ))}
+              {displayedVacantes.length === 0 && (
+                <tr>
+                  <td colSpan="4" className="text-center py-3">No hay vacantes</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
-      <footer className="footer">
-        <p>&copy; 2016 My Company, Inc.</p>
-      </footer>
+      {totalPages > 1 && (
+        <PaginacionVacantes
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 }
