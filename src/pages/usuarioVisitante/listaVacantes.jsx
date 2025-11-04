@@ -163,7 +163,7 @@ export default function ListaVacantes() {
                 <th>Vacante</th>
                 {/*<th>Descripción</th>*/}
                 <th>Publicado</th>
-                <th>Estado</th>
+                 {/*<th>Estado</th>*/}
                 <th></th>
               </tr>
             </thead>
@@ -188,7 +188,6 @@ export default function ListaVacantes() {
                         {v.activo ? 'Activa' : 'Inactiva'}
                       </span>
                     </td>*/}
-                    
                     <td>
                       <button
                         className="btn btn-sm btn-light border border-secondary text-dark"
