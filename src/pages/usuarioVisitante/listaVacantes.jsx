@@ -20,12 +20,12 @@ export default function ListaVacantes() {
     setLoading(true);
     setError(null);
     try {
-      const response = await vacanteService.getAll();
+      const response = await vacanteService.getActivas();
       setVacantes(response.data);
       setMensajeSinResultados('');
     } catch (err) {
       console.error('Error al cargar vacantes:', err);
-      setError('Error al cargar las vacantes');
+      setError('No hay vacantes disponibles en este momento.');
       setVacantes([]);
     } finally {
       setLoading(false);
