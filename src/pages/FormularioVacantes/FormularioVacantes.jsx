@@ -1,9 +1,12 @@
 import { useState } from "react";
+import Swal from 'sweetalert2'
 import { NavAdmin } from "../../components/NavAdmin/NavAdmin";
 import RadioSelect from "../../components/RadioSelect/RadioSelect";
+import { soloLetras } from "../../utils/Validaciones/Validaciones";
 
 export const FormularioVacante = ({ guardarVacante }) => {
     // ********************************** DEFINICION DE VARIABLES  *****************************************
+    const [errores, setErrores] = useState()
     // *******************************  INICIALIZANDO LOS FORMULARIOS **************************************
     const formularioInicialVacantes = {
         fechaPublicacion: new Date().toISOString().split('T')[0],
@@ -41,19 +44,97 @@ export const FormularioVacante = ({ guardarVacante }) => {
     // ********************  SE ENVIAN LOS DATOS DEL FORMULARIO PARA SER GUARDADOS  ************************
     const guardarVacantes = async (e) => {
         e.preventDefault();
-
+        if (validarCampos("vacantes") === 0)
+            return
         try {
-            console.log("Datos a enviar: ", datosFormularioVacantes)
-            const respuesta = await guardarVacante(datosFormularioVacantes)
-            if(respuesta.ok == false) {
-                console.log("Error back: ", respuesta.errores)
+            const vacantesGuardar = {
+                ...datosFormularioVacantes,
+                usuario: '1'
             }
+            const respuesta = await guardarVacante(vacantesGuardar)
+            if (respuesta.ok == false) {
+                mostrarError(respuesta.errores)
+                return
+            }
+
+            setErrores({})
+            setDatosFormularioVacantes(formularioInicialVacantes)
+            mostrarExito("Vacante agregado con exito.")
         } catch (error) {
             console.log("Ocurrio un error al guardar los datos: ", error)
         }
     }
     // ***********************************  VALIDACION DE CAMPOS  ******************************************
+    const validarCampos = (formulario) => {
+        const erroresTemporales = {}
+
+        if (formulario == "vacantes") {
+            Object.keys(datosFormularioVacantes).forEach((campo) => {
+                if (datosFormularioVacantes[campo] === null || datosFormularioVacantes[campo] === undefined || datosFormularioVacantes[campo] === '') {
+                    erroresTemporales[campo] = 'Este campo es obligatorio';
+                }
+
+            })
+        }
+
+        if (Object.keys(erroresTemporales).length > 0) {
+            setErrores(erroresTemporales);
+            mostrarCuidado("Tienes que llenar todos los campos requeridos")
+            return 0;
+        }
+
+        return 1;
+    }
     // **************************  FUNCIONES PARA MOSTRAR MENSAJES AL USUARIO  *****************************
+    const mostrarAlerta = (config) => {
+        return Swal.fire({
+            ...config,
+            timer: 5000,
+            timerProgressBar: true,
+            didOpen: () => {
+                const confirmButton = Swal.getConfirmButton();
+                //confirmButton.style.backgroundColor = 'var(--color-verde)';
+            },
+        });
+    };
+
+    const mostrarError = (mensajeHTML) => {
+        mostrarAlerta({
+            title: 'Error',
+            html: mensajeHTML, // Usa HTML para mostrar los errores sin viñetas
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+        });
+    };
+
+    const mostrarCuidado = (mensaje) => {
+        mostrarAlerta({
+            title: '!Alerta!',
+            text: mensaje,
+            icon: 'warning',
+            confirmButtonText: 'Aceptar',
+        });
+    };
+
+    const mostrarExito = (mensaje) => {
+        mostrarAlerta({
+            title: 'Éxito',
+            text: mensaje,
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+        }).then(() => {
+            navigate('/menuSolicitar')
+        });
+    };
+
+    const mostrarInformacion = (mensaje) => {
+        mostrarAlerta({
+            title: 'Periodo de registro cerrado',
+            text: mensaje,
+            icon: 'info',
+            confirmButtonText: 'Entendido',
+        });
+    };
 
     return (
         <div className="w-100">
@@ -70,14 +151,19 @@ export const FormularioVacante = ({ guardarVacante }) => {
                                     Nombre
                                 </label>
                                 <input
+                                    onBeforeInput={soloLetras}
+                                    maxLength={46}
+                                    minLength={8}
                                     type="text"
-                                    className="form-control"
+                                    className={`form-control ${errores?.nombre ? 'input-error' : ''}`}
                                     id="nombre"
                                     name="nombre"
                                     placeholder="Escriba el nombre la vacante"
-                                    value={datosFormularioVacantes.nombre}
+                                    value={datosFormularioVacantes?.nombre}
                                     onChange={actualizarCamposVacante}
                                 />
+                                {errores?.nombre && <div style={{ color: 'red' }}>{errores?.nombre}</div>}
+
                             </div>
 
                             <div className="mb-3">
@@ -85,14 +171,17 @@ export const FormularioVacante = ({ guardarVacante }) => {
                                     Descripción
                                 </label>
                                 <textarea
-                                    className="form-control"
+                                    maxLength={150}
+                                    minLength={8}
+                                    className={`form-control ${errores?.descripcion ? 'input-error' : ''}`}
                                     id="descripcion"
                                     name="descripcion"
                                     rows="3"
                                     placeholder="Escribe una descripción de la vacante"
-                                    value={datosFormularioVacantes.descripcion}
+                                    value={datosFormularioVacantes?.descripcion}
                                     onChange={actualizarCamposVacante}
                                 ></textarea>
+                                {errores?.descripcion && <div style={{ color: 'red' }}>{errores?.descripcion}</div>}
                             </div>
 
                             <div className="mb-3">
@@ -100,25 +189,28 @@ export const FormularioVacante = ({ guardarVacante }) => {
                                     Escriba los detalles
                                 </label>
                                 <textarea
-                                    className="form-control"
+                                    maxLength={150}
+                                    minLength={8}
+                                    className={`form-control ${errores?.detalle ? 'input-error' : ''}`}
                                     id="detalle"
                                     name="detalle"
                                     rows="4"
                                     placeholder="Escriba los detalles de la vacante"
-                                    value={datosFormularioVacantes.detalle}
+                                    value={datosFormularioVacantes?.detalle}
                                     onChange={actualizarCamposVacante}
                                 ></textarea>
+                                {errores?.detalle && <div style={{ color: 'red' }}>{errores?.detalle}</div>}
                             </div>
 
                             <div className="mb-3">
-                                <label className="fw-bolder">Estado:</label>
+                                <label className="fw-bolder">Activo:</label>
                                 <RadioSelect
                                     options={["Si", "No"]}
                                     name="activo"
                                     onChange={actualizarCamposVacante}
-                                    value={boolToSiNo(datosFormularioVacantes.activo)}
+                                    value={boolToSiNo(datosFormularioVacantes?.activo)}
                                 />
-
+                                {errores?.activo && <div style={{ color: 'red' }}>{errores?.activo}</div>}
                             </div>
 
                             <button className="btn btn-secondary">
