@@ -95,6 +95,11 @@ export const ListarVacantesAdministrador = () => {
     });
 
     if (confirmacion.isConfirmed) {
+      try {
+        await VacanteService.deleteById(id);
+      } catch (error) {
+        console.error("Error al eliminar la vacante:", error);
+      }
       setVacantes((prev) => prev.filter((v) => v.id !== id));
       Swal.fire({
         icon: "success",

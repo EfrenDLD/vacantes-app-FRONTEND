@@ -7,7 +7,7 @@ const getAll = async () => {
     const response = await axiosInstance.get(API_URL);
     return response.data;
   } catch (error) {
-    throw error.response?.data || error.message;
+    throw error.response?.data || 'Error al obtener vacantes';
   }
 };
 
@@ -29,8 +29,64 @@ const cambiarEstado = async (id, activo) => {
   }
 };
 
+/**
+ * Obtener vacante por ID
+ */
+const getById = async (id) => {
+  try {
+    const response = await axiosInstance.get(`${API_URL}/${id}`);
+    return response;
+  } catch (error) {
+    throw error.response?.data || 'Error al obtener la vacante';
+  }
+};
+
+/**
+ * Buscar vacantes por palabra clave
+ */
+const buscar = async (keyword) => {
+  try {
+    const response = await axiosInstance.get(`${API_URL}/buscar`, {
+      params: { keyword }
+    });
+    return response;
+  } catch (error) {
+    throw error.response?.data || 'Error al buscar vacantes';
+  }
+};
+
+/**
+ * Obtener vacantes activas
+ */
+const getActivas = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL}/activas`);
+    return response;
+  } catch (error) {
+    throw error.response?.data || 'Error al obtener vacantes activas';
+  }
+};
+
+/**
+ * Eliminar vacante por ID
+ */
+const deleteById = async (id) => {
+  try {
+    const response = await axiosInstance.delete(API_URL, {
+      params: { id }
+    });
+    return response;
+  } catch (error) {
+    throw error.response?.data || 'Error al eliminar la vacante';
+  }
+};
+
 export default {
-    create,
-    getAll,
-    cambiarEstado
+  create,
+  getAll,
+  cambiarEstado,
+  getById,
+  buscar,
+  getActivas,
+  deleteById
 }
