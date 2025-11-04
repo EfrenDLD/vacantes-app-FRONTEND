@@ -136,13 +136,6 @@ export default function ListaVacantes() {
         </form>
       </div>
 
-      {/* Mensaje de error */}
-      {error && (
-        <div className="alert alert-danger" role="alert">
-          {error}
-        </div>
-      )}
-
       {/* Tabla de vacantes */}
       <div className="card">
         <div className="card-header">
@@ -163,7 +156,7 @@ export default function ListaVacantes() {
                 <th>Vacante</th>
                 {/*<th>Descripción</th>*/}
                 <th>Publicado</th>
-                 {/*<th>Estado</th>*/}
+                {/*<th>Estado</th>*/}
                 <th></th>
               </tr>
             </thead>
@@ -180,7 +173,7 @@ export default function ListaVacantes() {
                 displayedVacantes.map(v => (
                   <tr key={v.id}>
                     <td>{v.id}</td>
-                    <td><strong>{v.nombre}</strong></td>
+                    <td>{v.nombre}</td>
                     {/*<th>  <td>{v.descripcion || 'Sin descripción'}</td> </th>*/}
                     <td>{new Date(v.fechaPublicacion).toLocaleDateString('es-MX')}</td>
                     {/*<td>
@@ -205,6 +198,13 @@ export default function ListaVacantes() {
                     {mensajeSinResultados && (
                       <div className="alert alert-info" role="alert">
                         {mensajeSinResultados}
+                      </div>
+                    )}
+
+                    {/* Mensaje de error */}
+                    {error && (
+                      <div className="alert alert-danger" role="alert">
+                        {error}
                       </div>
                     )}
                   </td>
