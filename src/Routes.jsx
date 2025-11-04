@@ -4,6 +4,7 @@ import { NavAdmin } from "./components/NavAdmin/NavAdmin.jsx";
 import { ListarVacantesAdministrador } from "./pages/usuarioAdministrador/ListarVacantesAdministrador.jsx";
 import ListaVacantes from "./pages/usuarioVisitante/listaVacantes";
 import Vacantes from "./pages/usuarioVisitante/vacantes";
+import { DetalleVacante } from "./pages/DetallesVacantes/DetallesVacantes.jsx";
 
 
 const AppRoutes = () => {
@@ -14,6 +15,7 @@ const AppRoutes = () => {
         <Route path="/listaVacantes" element={<ListaVacantes />} />
         <Route path="/vacantes" element={<Vacantes />} />
         <Route path="/listarVacantesAdministrador" element={<ListarVacantesAdministrador />} />
+        <Route path="/detalleVacante" element={<DetalleVacante/>}/>
     </Routes>
   );
 };

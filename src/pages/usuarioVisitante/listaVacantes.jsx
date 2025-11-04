@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
 
 const initialVacantes = [
   { id: '1', titulo: 'Ingeniero de Software Senior (Backend)', publicado: '2025-10-15' },
@@ -15,6 +16,7 @@ const initialVacantes = [
 export default function ListaVacantes() {
   const [query, setQuery] = useState('');
   const [vacantes, setVacantes] = useState(initialVacantes);
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -63,6 +65,7 @@ export default function ListaVacantes() {
                   <td>
                     <button
                       className="btn btn-sm btn-light border border-secondary text-dark"
+                      onClick={() => navigate("/detalleVacante")}
                     >
                       Ver Detalles
                     </button>
