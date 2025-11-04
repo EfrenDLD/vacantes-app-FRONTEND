@@ -1,59 +1,152 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { PaginacionVacantes } from "../../components/paginacionVacantes/paginacionVacantes";
-
-const initialVacantes = [
-  { id: '1', titulo: 'Ingeniero de Software Senior (Backend)', publicado: '2025-10-15' },
-  { id: '2', titulo: 'Desarrollador Frontend (React)', publicado: '2025-10-10' },
-  { id: '3', titulo: 'Ingeniero DevOps', publicado: '2025-09-30' },
-  { id: '4', titulo: 'Desarrollador Full Stack (React/Node)', publicado: '2025-10-01' },
-  { id: '5', titulo: 'Ingeniero de Datos', publicado: '2025-09-25' },
-  { id: '6', titulo: 'QA Automation Engineer', publicado: '2025-10-05' },
-  { id: '7', titulo: 'Desarrollador Mobile (React Native)', publicado: '2025-10-12' },
-  { id: '8', titulo: 'UX/UI Designer', publicado: '2025-10-08' },
-];
+import vacanteService from '../../service/VacanteService';
 
 export default function ListaVacantes() {
+  // ********************************** DEFINICION DE VARIABLES *****************************************
   const [query, setQuery] = useState('');
-  const [vacantes, setVacantes] = useState(initialVacantes);
+  const [vacantes, setVacantes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [mensajeSinResultados, setMensajeSinResultados] = useState('');
+
   const itemsPerPage = 6;
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const q = query.trim().toLowerCase();
-    setVacantes(q ? initialVacantes.filter(v => v.titulo.toLowerCase().includes(q)) : initialVacantes);
-    setCurrentPage(1); // reset a página 1 al buscar
+  // ********************************** OBTENER DATOS DE LA BD *****************************************
+  //Cargar todas las vacantes al iniciar el componente
+  const cargarVacantes = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await vacanteService.getActivas();
+      setVacantes(response.data);
+      setMensajeSinResultados('');
+    } catch (err) {
+      console.error('Error al cargar vacantes:', err);
+      setError('No hay vacantes disponibles en este momento.');
+      setVacantes([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const totalPages = Math.ceil(vacantes.length / itemsPerPage);
-  const displayedVacantes = vacantes.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // ********************************** USE EFFECTS **********************************
 
+  //cargar vacantes cuando se monta el componente
+  useEffect(() => {
+    cargarVacantes();
+  }, []);
+
+  // ********************************** MANEJADORES DE CAMBIOS *****************************************
+
+  //Manejar cambio en el input de búsqueda
+  const handleQueryChange = (e) => {
+    setQuery(e.target.value);
+    // Si el campo está vacío, recargar todas las vacantes
+    if (e.target.value.trim() === '') {
+      cargarVacantes();
+      setMensajeSinResultados('');
+    }
+  };
+
+  // ******************************* FUNCIONES GENERALES *******************************************
+  // Realizar búsqueda de vacantes
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+
+    const palabraClave = query.trim();
+
+    // Si no hay palabra clave, cargar todas las vacantes
+    if (palabraClave === '') {
+      cargarVacantes();
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    setMensajeSinResultados('');
+
+    try {
+      const response = await vacanteService.buscar(palabraClave);
+
+      // Escenario 2: Sin resultados
+      if (response.data.length === 0) {
+        setMensajeSinResultados('No se encontraron resultados para tu búsqueda.');
+        setVacantes([]);
+      } else {
+        // Escenario 1 y 3: Búsqueda exitosa 
+        setVacantes(response.data);
+        setMensajeSinResultados('');
+      }
+
+      setCurrentPage(1); // Resetear a página 1 al buscar
+    } catch (err) {
+      console.error('Error al buscar vacantes:', err);
+      setError('Error al realizar la búsqueda');
+      setVacantes([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //Cambiar de pagina en la paginación
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
+  //Ver detalles de una vacante
+  const verDetalles = (id) => {
+    // TODO: Implementar navegación a detalles
+    alert('Ver detalles: ' + id);
+  };
+
+  // ***************************** CALCULOS DE PAGINACION *****************************
+  const totalPages = Math.ceil(vacantes.length / itemsPerPage);
+  const displayedVacantes = vacantes.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // ***************************** RENDERIZADO *****************************
   return (
     <div className="container-fluid py-3">
+      {/* Formulario de búsqueda */}
       <div className="d-flex justify-content-end mb-3">
         <form className="d-flex" onSubmit={handleSearch}>
           <input
             type="text"
             name="query"
-            required
             placeholder="Buscar oferta..."
             className="form-control me-2"
             style={{ maxWidth: 300 }}
             value={query}
-            onChange={e => setQuery(e.target.value)}
+            onChange={handleQueryChange}
+            disabled={loading}
           />
-          <button type="submit" className="btn btn-success">Buscar</button>
+          <button
+            type="submit"
+            className="btn btn-success"
+            disabled={loading}
+          >
+            {loading ? 'Buscando...' : 'Buscar'}
+          </button>
         </form>
       </div>
 
+      {/* Tabla de vacantes */}
       <div className="card">
         <div className="card-header">
-          <h5 className="mb-0"><b>Lista de Vacantes</b></h5>
+          <h5 className="mb-0">
+            <b>Lista de Vacantes</b>
+            {/*vacantes.length > 0 && (
+              <span className="badge bg-secondary ms-2">
+                {vacantes.length} vacante{vacantes.length !== 1 ? 's' : ''}
+              </span>
+            )*/}
+          </h5>
         </div>
         <div className="card-body p-0">
           <table className="table table-striped mb-0">
@@ -61,36 +154,69 @@ export default function ListaVacantes() {
               <tr>
                 <th>ID</th>
                 <th>Vacante</th>
+                {/*<th>Descripción</th>*/}
                 <th>Publicado</th>
+                {/*<th>Estado</th>*/}
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {displayedVacantes.map(v => (
-                <tr key={v.id}>
-                  <td>{v.id}</td>
-                  <td>{v.titulo}</td>
-                  <td>{v.publicado}</td>
-                  <td>
-                    <button
-                      className="btn btn-sm btn-light border border-secondary text-dark"
-                      onClick={() => alert('Ver detalles: ' + v.id)}
-                    >
-                      Ver Detalles
-                    </button>
+              {loading ? (
+                <tr>
+                  <td colSpan="6" className="text-center py-3">
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="visually-hidden">Cargando...</span>
+                    </div>
                   </td>
                 </tr>
-              ))}
-              {displayedVacantes.length === 0 && (
+              ) : displayedVacantes.length > 0 ? (
+                displayedVacantes.map(v => (
+                  <tr key={v.id}>
+                    <td>{v.id}</td>
+                    <td>{v.nombre}</td>
+                    {/*<th>  <td>{v.descripcion || 'Sin descripción'}</td> </th>*/}
+                    <td>{new Date(v.fechaPublicacion).toLocaleDateString('es-MX')}</td>
+                    {/*<td>
+                      <span className={`badge ${v.activo ? 'bg-success' : 'bg-secondary'}`}>
+                        {v.activo ? 'Activa' : 'Inactiva'}
+                      </span>
+                    </td>*/}
+                    <td>
+                      <button
+                        className="btn btn-sm btn-light border border-secondary text-dark"
+                        onClick={() => verDetalles(v.id)}
+                      >
+                        Ver Detalles
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
                 <tr>
-                  <td colSpan="4" className="text-center py-3">No hay vacantes</td>
+                  <td colSpan="6" className="text-center py-3">
+                    {/* Mensaje sin resultados */}
+                    {mensajeSinResultados && (
+                      <div className="alert alert-info" role="alert">
+                        {mensajeSinResultados}
+                      </div>
+                    )}
+
+                    {/* Mensaje de error */}
+                    {error && (
+                      <div className="alert alert-danger" role="alert">
+                        {error}
+                      </div>
+                    )}
+                  </td>
                 </tr>
+
               )}
             </tbody>
           </table>
         </div>
       </div>
 
+      {/* Paginación */}
       {totalPages > 1 && (
         <PaginacionVacantes
           currentPage={currentPage}
