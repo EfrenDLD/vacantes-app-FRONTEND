@@ -11,16 +11,8 @@ const create = async (params) => {
   }
 };
 
-const getAll = async () => {
-  try {
-    const response = await axiosInstance.get(API_URL);
-    return response.data; 
-  } catch (error) {
-    throw error.response.data;
-  }
-};
+
 
 export default {
-    create,
-    getAll
+    create
 }
