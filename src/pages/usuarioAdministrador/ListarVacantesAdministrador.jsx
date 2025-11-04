@@ -43,7 +43,7 @@ export const ListarVacantesAdministrador = () => {
   // --- Funciones para cambiar estado y eliminar ---
   const handleCambiarEstado = async (vacante) => {
     const nuevoEstado = vacante.estado === "Activa" ? "Inactiva" : "Activa";
-    const activo = nuevoEstado === "Activa"; // true si activas, false si desactivas
+    const activo = nuevoEstado === "Activa"; 
 
     const confirmacion = await Swal.fire({
       title: "¿Cambiar estado?",
