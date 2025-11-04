@@ -183,11 +183,12 @@ export default function ListaVacantes() {
                     <td><strong>{v.nombre}</strong></td>
                     {/*<th>  <td>{v.descripcion || 'Sin descripción'}</td> </th>*/}
                     <td>{new Date(v.fechaPublicacion).toLocaleDateString('es-MX')}</td>
-                    <td>
+                    {/*<td>
                       <span className={`badge ${v.activo ? 'bg-success' : 'bg-secondary'}`}>
                         {v.activo ? 'Activa' : 'Inactiva'}
                       </span>
-                    </td>
+                    </td>*/}
+                    
                     <td>
                       <button
                         className="btn btn-sm btn-light border border-secondary text-dark"
