@@ -20,8 +20,17 @@ const create = async (params) => {
   }
 };
 
+const cambiarEstado = async (id, activo) => {
+  try {
+    const response = await axiosInstance.put(`${API_URL}/${id}/estado`, { activo });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
 
 export default {
     create,
-    getAll
+    getAll,
+    cambiarEstado
 }

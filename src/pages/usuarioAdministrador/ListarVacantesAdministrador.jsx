@@ -43,6 +43,8 @@ export const ListarVacantesAdministrador = () => {
   // --- Funciones para cambiar estado y eliminar ---
   const handleCambiarEstado = async (vacante) => {
     const nuevoEstado = vacante.estado === "Activa" ? "Inactiva" : "Activa";
+    const activo = nuevoEstado === "Activa"; // true si activas, false si desactivas
+
     const confirmacion = await Swal.fire({
       title: "¿Cambiar estado?",
       text: `¿Deseas marcar la vacante "${vacante.nombre}" como ${nuevoEstado}?`,
@@ -55,15 +57,28 @@ export const ListarVacantesAdministrador = () => {
     });
 
     if (confirmacion.isConfirmed) {
-      setVacantes((prev) =>
-        prev.map((v) => (v.id === vacante.id ? { ...v, estado: nuevoEstado } : v))
-      );
-      Swal.fire({
-        icon: "success",
-        title: `Vacante ${nuevoEstado === "Activa" ? "activada" : "inactivada"} correctamente.`,
-        timer: 1800,
-        showConfirmButton: false,
-      });
+      try {
+        await vacanteService.cambiarEstado(vacante.id, activo);
+
+        setVacantes((prev) =>
+          prev.map((v) =>
+            v.id === vacante.id ? { ...v, estado: nuevoEstado } : v
+          )
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: `Vacante ${nuevoEstado === "Activa" ? "activada" : "desactivada"} correctamente.`,
+          timer: 1800,
+          showConfirmButton: false,
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error al cambiar el estado",
+          text: error.toString(),
+        });
+      }
     }
   };
 
@@ -134,16 +149,17 @@ export const ListarVacantesAdministrador = () => {
                   <td>{v.fecha}</td>
                   <td>
                     <button
-                      className="btn btn-secondary btn-sm me-2"
+                      className={`btn btn-sm me-2 ${v.estado === "Activa" ? "btn-outline-danger" : "btn-outline-success"
+                        }`}
                       onClick={() => handleCambiarEstado(v)}
                     >
                       {v.estado === "Activa" ? "Desactivar" : "Activar"}
                     </button>
-                    <button className="btn btn-secondary btn-sm me-2">
+                    <button className="btn btn-sm me-2 btn-outline-dark">
                       Ver Detalles
                     </button>
                     <button
-                      className="btn btn-danger btn-sm"
+                      className="btn btn-sm btn-outline-danger"
                       onClick={() => handleEliminar(v.id)}
                     >
                       Eliminar
