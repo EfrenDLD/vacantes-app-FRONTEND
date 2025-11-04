@@ -7,6 +7,7 @@ import { soloLetras } from "../../utils/Validaciones/Validaciones";
 export const FormularioVacante = ({ guardarVacante }) => {
     // ********************************** DEFINICION DE VARIABLES  *****************************************
     const [errores, setErrores] = useState()
+
     // *******************************  INICIALIZANDO LOS FORMULARIOS **************************************
     const formularioInicialVacantes = {
         fechaPublicacion: new Date().toISOString().split('T')[0],
@@ -38,9 +39,11 @@ export const FormularioVacante = ({ guardarVacante }) => {
         }
 
     }
+
     // ******************************* FUNCIONES GENERALES *******************************************
     const boolToSiNo = (valor) => valor === true ? 'Si' : valor === false ? 'No' : '';
     const siNoToBool = (valor) => valor === 'Si' ? true : valor === 'No' ? false : null;
+
     // ********************  SE ENVIAN LOS DATOS DEL FORMULARIO PARA SER GUARDADOS  ************************
     const guardarVacantes = async (e) => {
         e.preventDefault();
@@ -53,7 +56,10 @@ export const FormularioVacante = ({ guardarVacante }) => {
             }
             const respuesta = await guardarVacante(vacantesGuardar)
             if (respuesta.ok == false) {
-                mostrarError(respuesta.errores)
+                if(!respuesta.errores.response)
+                    mostrarError("Error de conexion. Inténtalo más tarde.")
+                else
+                    mostrarError(respuesta.errores)
                 return
             }
 
@@ -64,6 +70,7 @@ export const FormularioVacante = ({ guardarVacante }) => {
             console.log("Ocurrio un error al guardar los datos: ", error)
         }
     }
+
     // ***********************************  VALIDACION DE CAMPOS  ******************************************
     const validarCampos = (formulario) => {
         const erroresTemporales = {}
@@ -85,6 +92,7 @@ export const FormularioVacante = ({ guardarVacante }) => {
 
         return 1;
     }
+    
     // **************************  FUNCIONES PARA MOSTRAR MENSAJES AL USUARIO  *****************************
     const mostrarAlerta = (config) => {
         return Swal.fire({
@@ -93,7 +101,6 @@ export const FormularioVacante = ({ guardarVacante }) => {
             timerProgressBar: true,
             didOpen: () => {
                 const confirmButton = Swal.getConfirmButton();
-                //confirmButton.style.backgroundColor = 'var(--color-verde)';
             },
         });
     };
@@ -101,7 +108,7 @@ export const FormularioVacante = ({ guardarVacante }) => {
     const mostrarError = (mensajeHTML) => {
         mostrarAlerta({
             title: 'Error',
-            html: mensajeHTML, // Usa HTML para mostrar los errores sin viñetas
+            html: mensajeHTML,
             icon: 'error',
             confirmButtonText: 'Aceptar',
         });
