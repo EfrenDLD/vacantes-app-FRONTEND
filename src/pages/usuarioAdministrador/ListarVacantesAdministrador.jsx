@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Swal from "sweetalert2";
 import "../../styles/usuarioAdministrador/ListarVacantesAdministrador.css";
+import VacanteService from "../../service/VacanteService";
 
 export const ListarVacantesAdministrador = () => {
   const [vacantes, setVacantes] = useState([]);
@@ -11,13 +12,21 @@ export const ListarVacantesAdministrador = () => {
   }, []);
 
   const obtenerVacantes = async () => {
-    // Datos temporales para prueba
-    setVacantes([
-      { id: 1, nombre: "Desarrollador Frontend", fecha: "2025-10-30", estado: "Activa" },
-      { id: 2, nombre: "Diseñador UX/UI", fecha: "2025-10-28", estado: "Inactiva" },
-      { id: 3, nombre: "Administrador de Sistemas", fecha: "2025-10-25", estado: "Activa" },
-      { id: 4, nombre: "Tester QA", fecha: "2025-10-22", estado: "Inactiva" },
-    ]);
+    try {
+      const response = await VacanteService.getAll();
+      // Transformar los datos al formato esperado por la tabla
+      const vacantesFormateadas = response.data.map(v => ({
+        id: v.id,
+        nombre: v.nombre,
+        fecha: v.fechaPublicacion,
+        estado: v.activo ? "Activa" : "Inactiva",
+        // Puedes agregar más campos si los necesitas
+      }));
+      setVacantes(vacantesFormateadas);
+    } catch (error) {
+      console.error("Error al obtener las vacantes:", error);
+      // Opcional: setVacantes([]) o mostrar mensaje de error
+    }
   };
 
   const handleCambiarEstado = async (vacante) => {
@@ -60,6 +69,11 @@ export const ListarVacantesAdministrador = () => {
     });
 
     if (confirmacion.isConfirmed) {
+      try {
+        await VacanteService.deleteById(id);
+      } catch (error) {
+        console.error("Error al eliminar la vacante:", error);
+      }
       setVacantes((prev) => prev.filter((v) => v.id !== id));
       Swal.fire({
         icon: "success",
