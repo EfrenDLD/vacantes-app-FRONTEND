@@ -18,7 +18,7 @@ const AppRoutes = () => {
         <Route path="/vacantes" element={<Vacantes />} />
         <Route path="/paginacion" element={<PaginacionVacantes />} />
         <Route path="/listarVacantesAdministrador" element={<ListarVacantesAdministrador />} />
-        <Route path="/detalleVacante" element={<DetalleVacante/>}/>
+        <Route path="/detalleVacante/:id" element={<DetalleVacante />} />
     </Routes>
   );
 };

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { PaginacionVacantes } from "../../components/paginacionVacantes/paginacionVacantes";
 import vacanteService from '../../service/VacanteService';
+import { useNavigate } from "react-router-dom";
+
 
 export default function ListaVacantes() {
   // ********************************** DEFINICION DE VARIABLES *****************************************
@@ -13,6 +15,8 @@ export default function ListaVacantes() {
   const [mensajeSinResultados, setMensajeSinResultados] = useState('');
 
   const itemsPerPage = 6;
+
+  const navigate = useNavigate();
 
   // ********************************** OBTENER DATOS DE LA BD *****************************************
   //Cargar todas las vacantes al iniciar el componente
@@ -100,7 +104,7 @@ export default function ListaVacantes() {
   //Ver detalles de una vacante
   const verDetalles = (id) => {
     // TODO: Implementar navegación a detalles
-    alert('Ver detalles: ' + id);
+    navigate(`/detalleVacante/${id}`);
   };
 
   // ***************************** CALCULOS DE PAGINACION *****************************

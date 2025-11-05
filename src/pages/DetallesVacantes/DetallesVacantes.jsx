@@ -1,10 +1,60 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"; 
+import vacanteService from "../../service/VacanteService"; 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export const DetalleVacante = () => {
+  const { id } = useParams(); 
+  const [vacante, setVacante] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchVacante = async () => {
+      try {
+        const data = await vacanteService.getById(id); 
+        setVacante(data.data); 
+      } catch (err) {
+        setError(err.toString());
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVacante();
+  }, [id]);
+
+  // Si está cargando
+  if (loading) {
+    return (
+      <div className="container my-4 text-center">
+        <p>Cargando detalles de la vacante...</p>
+      </div>
+    );
+  }
+
+  // Si hay error
+  if (error) {
+    return (
+      <div className="container my-4 text-center">
+        <p style={{ color: "red" }}>Error: {error}</p>
+      </div>
+    );
+  }
+
+  // Si no se encontró la vacante
+  if (!vacante) {
+    return (
+      <div className="container my-4 text-center">
+        <p>No se encontró la vacante solicitada.</p>
+      </div>
+    );
+  }
+
+  // Mostrar los datos
   return (
     <div className="container my-4">
-
+      {/* Formulario de búsqueda (opcional) */}
       <form method="post" action="#" className="d-flex justify-content-end mb-4">
         <div className="form-group me-2">
           <input
@@ -22,29 +72,27 @@ export const DetalleVacante = () => {
 
       <div className="panel panel-primary">
         <div className="panel-heading bg-primary text-white p-2 rounded-top">
-          <h3 className="panel-title m-0">Número de la vacante: 4</h3>
+          <h3 className="panel-title m-0">
+            Número de la vacante: {vacante.id}
+          </h3>
         </div>
         <div className="panel-body border p-3 rounded-bottom">
           <h5>
-            <b>Vacante:</b> Ingeniero de Software Senior (Backend)
+            <b>Vacante:</b> {vacante.nombre}
           </h5>
           <h5>
-            <b>Publicado:</b> 2025-10-15
+            <b>Publicado:</b>{" "}
+            {vacante.fechaPublicacion || "Sin fecha"}
           </h5>
           <b>Descripción:</b>
-          <p className="text-justify">Desarrollo Backend:
-
-Diseñar, implementar y mantener APIs RESTful eficientes, escalables y seguras utilizando Node.js y frameworks como Express.
-Garantizar la correcta comunicación e interoperabilidad entre los sistemas backend y frontend.</p>
+          <p className="text-justify">{vacante.descripcion}</p>
           <b>Detalles de la vacante:</b>
-          <p>Buscamos un Ingeniero de Software Full Stack talentoso y proactivo para unirse a nuestro equipo. Serás una pieza clave en el ciclo de vida completo del desarrollo, desde el diseño de la arquitectura hasta la implementación y pruebas.
-
-El candidato ideal es un apasionado por la tecnología, con experiencia sólida tanto en el frontend con Angular como en el backend con Node.js, y que no teme enfrentarse a retos complejos, como la gestión documental y modelos criptográficos.</p>
+          <p>{vacante.detalle}</p>
         </div>
       </div>
 
       <footer className="footer mt-5 text-center">
-        <p>&copy; 2016 My Company, Inc.</p>
+        <p>&copy; 2025 My Company, Inc.</p>
       </footer>
     </div>
   );

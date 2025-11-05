@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { PaginacionVacantes } from "../../components/paginacionVacantes/paginacionVacantes";
 import { NavAdmin } from "../../components/NavAdmin/NavAdmin";
 import vacanteService from "../../service/VacanteService";
+import { useNavigate } from "react-router-dom";
 
 export const ListarVacantesAdministrador = () => {
   const [vacantes, setVacantes] = useState([]);
@@ -11,10 +12,15 @@ export const ListarVacantesAdministrador = () => {
   const [currentPageInactivas, setCurrentPageInactivas] = useState(1);
   const vacantesPorPagina = 8;
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     obtenerVacantes();
   }, []);
 
+  const verDetalles = (id) => {
+    navigate(`/detalleVacante/${id}`);
+  };
   const obtenerVacantes = async () => {
     try {
       const data = await vacanteService.getAll();
@@ -160,7 +166,8 @@ export const ListarVacantesAdministrador = () => {
                     >
                       {v.estado === "Activa" ? "Desactivar" : "Activar"}
                     </button>
-                    <button className="btn btn-sm me-2 btn-outline-dark">
+                    <button className="btn btn-sm me-2 btn-outline-dark"
+                      onClick={() => verDetalles(v.id)}>
                       Ver Detalles
                     </button>
                     <button
