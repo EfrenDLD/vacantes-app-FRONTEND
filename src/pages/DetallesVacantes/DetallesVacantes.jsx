@@ -24,7 +24,7 @@ export const DetalleVacante = () => {
     fetchVacante();
   }, [id]);
 
-  // Si está cargando
+
   if (loading) {
     return (
       <div className="container my-4 text-center">
@@ -33,7 +33,6 @@ export const DetalleVacante = () => {
     );
   }
 
-  // Si hay error
   if (error) {
     return (
       <div className="container my-4 text-center">
@@ -42,7 +41,7 @@ export const DetalleVacante = () => {
     );
   }
 
-  // Si no se encontró la vacante
+
   if (!vacante) {
     return (
       <div className="container my-4 text-center">
@@ -51,24 +50,9 @@ export const DetalleVacante = () => {
     );
   }
 
-  // Mostrar los datos
+
   return (
     <div className="container my-4">
-      {/* Formulario de búsqueda (opcional) */}
-      <form method="post" action="#" className="d-flex justify-content-end mb-4">
-        <div className="form-group me-2">
-          <input
-            type="text"
-            name="query"
-            required
-            placeholder="Buscar oferta..."
-            className="form-control"
-          />
-        </div>
-        <button type="submit" className="btn btn-success">
-          Buscar
-        </button>
-      </form>
 
       <div className="panel panel-primary">
         <div className="panel-heading bg-primary text-white p-2 rounded-top">
