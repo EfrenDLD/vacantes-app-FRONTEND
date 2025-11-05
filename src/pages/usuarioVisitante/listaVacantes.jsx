@@ -27,9 +27,13 @@ export default function ListaVacantes() {
       const response = await vacanteService.getActivas();
       setVacantes(response.data);
       setMensajeSinResultados('');
+      if (response.data.length === 0) {
+        setMensajeSinResultados('No hay vacantes disponibles en este momento.');
+      }
     } catch (err) {
       console.error('Error al cargar vacantes:', err);
       setError('No hay vacantes disponibles en este momento.');
+      //mensajeSinResultados('No hay vacantes disponibles en este momento.')
       setVacantes([]);
     } finally {
       setLoading(false);
