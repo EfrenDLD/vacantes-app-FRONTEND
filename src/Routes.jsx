@@ -8,10 +8,14 @@ import { GestionFormularioVacantes } from "./pages/FormularioVacantes/GestionFor
 import { PaginacionVacantes } from "./components/paginacionVacantes/paginacionVacantes.jsx";
 import { DetalleVacante } from "./pages/DetallesVacantes/DetallesVacantes.jsx";
 
+import Login from "./Login/login.jsx";
 
 const AppRoutes = () => {
   return (
     <Routes>
+        <Route path="/" element={<Login />} />
+
+        <Route path="/login" element={<Login />} />
         <Route path="/navAdmin" element={<NavAdmin />} />
         <Route path="/formularioVacante" element={<GestionFormularioVacantes />} />  
         <Route path="/listaVacantes" element={<ListaVacantes />} />
