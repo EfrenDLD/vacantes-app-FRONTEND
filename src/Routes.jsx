@@ -6,6 +6,7 @@ import ListaVacantes from "./pages/usuarioVisitante/listaVacantes";
 import Vacantes from "./pages/usuarioVisitante/vacantes";
 import { GestionFormularioVacantes } from "./pages/FormularioVacantes/GestionFormularioVacantes.jsx";
 import { PaginacionVacantes } from "./components/paginacionVacantes/paginacionVacantes.jsx";
+import { Acerca } from "./pages/acerca/Acerca.jsx";
 
 
 const AppRoutes = () => {
@@ -17,6 +18,7 @@ const AppRoutes = () => {
         <Route path="/vacantes" element={<Vacantes />} />
         <Route path="/paginacion" element={<PaginacionVacantes />} />
         <Route path="/listarVacantesAdministrador" element={<ListarVacantesAdministrador />} />
+        <Route path="/acerca" element={<Acerca />} />
     </Routes>
   );
 };
