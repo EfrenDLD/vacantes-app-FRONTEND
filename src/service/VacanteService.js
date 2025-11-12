@@ -11,6 +11,15 @@ const create = async (params) => {
   }
 };
 
+const update = async (id, vacante) => {
+  try {
+    const response = await axiosInstance.put(`${API_URL}/${id}`, vacante);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+}
+
 /**
  * Obtener todas las vacantes
  */
@@ -77,6 +86,7 @@ const deleteById = async (id) => {
 
 export default {
   create,
+  update,
   getAll,
   getById,
   buscar,

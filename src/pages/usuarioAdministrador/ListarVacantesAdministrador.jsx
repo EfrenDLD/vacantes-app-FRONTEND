@@ -3,9 +3,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Swal from "sweetalert2";
 import "../../styles/usuarioAdministrador/ListarVacantesAdministrador.css";
 import VacanteService from "../../service/VacanteService";
+import { useNavigate } from "react-router-dom";
+
 
 export const ListarVacantesAdministrador = () => {
   const [vacantes, setVacantes] = useState([]);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     obtenerVacantes();
@@ -84,6 +88,11 @@ export const ListarVacantesAdministrador = () => {
     }
   };
 
+  const handlerEditar = (vacante) => {
+    console.log("vacante seleccionado", vacante)
+    navigate(`/formularioVacante/${vacante.id}`);
+  };
+
   const vacantesActivas = vacantes.filter((v) => v.estado === "Activa");
   const vacantesInactivas = vacantes.filter((v) => v.estado === "Inactiva");
 
@@ -126,6 +135,12 @@ export const ListarVacantesAdministrador = () => {
                       onClick={() => handleEliminar(v.id)}
                     >
                       Eliminar
+                    </button>
+                    <button
+                      className="btn btn-primary ms-2"
+                      onClick={() => handlerEditar(v)}
+                    >
+                      Editar
                     </button>
                   </td>
                 </tr>

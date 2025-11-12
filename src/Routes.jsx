@@ -13,6 +13,7 @@ const AppRoutes = () => {
     <Routes>
         <Route path="/navAdmin" element={<NavAdmin />} />
         <Route path="/formularioVacante" element={<GestionFormularioVacantes />} />  
+        <Route path="/formularioVacante/:id" element={<GestionFormularioVacantes />} />
         <Route path="/listaVacantes" element={<ListaVacantes />} />
         <Route path="/vacantes" element={<Vacantes />} />
         <Route path="/paginacion" element={<PaginacionVacantes />} />
