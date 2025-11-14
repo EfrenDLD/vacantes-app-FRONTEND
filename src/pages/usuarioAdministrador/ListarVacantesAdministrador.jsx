@@ -116,6 +116,11 @@ export const ListarVacantesAdministrador = () => {
     }
   };
 
+  const handlerEditar = (vacante) => {
+
+    navigate(`/formularioVacante/${vacante.id}`);
+  };
+
   // --- Filtrado ---
   const vacantesActivas = vacantes.filter((v) => v.estado === "Activa");
   const vacantesInactivas = vacantes.filter((v) => v.estado === "Inactiva");
@@ -175,6 +180,12 @@ export const ListarVacantesAdministrador = () => {
                       onClick={() => handleEliminar(v.id)}
                     >
                       Eliminar
+                    </button>
+                    <button
+                      className="btn btn-outline-primary ms-2"
+                      onClick={() => handlerEditar(v)}
+                    >
+                      Editar
                     </button>
                   </td>
                 </tr>

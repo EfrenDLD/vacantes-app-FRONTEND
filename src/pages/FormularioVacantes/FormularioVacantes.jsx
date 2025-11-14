@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from 'sweetalert2'
 import { NavAdmin } from "../../components/NavAdmin/NavAdmin";
 import RadioSelect from "../../components/RadioSelect/RadioSelect";
 import { soloLetras } from "../../utils/Validaciones/Validaciones";
+import { useParams } from "react-router-dom";
+import VacanteService from "../../service/VacanteService";
 
-export const FormularioVacante = ({ guardarVacante }) => {
+export const FormularioVacante = ({ guardarVacante, actualizarVacante }) => {
     // ********************************** DEFINICION DE VARIABLES  *****************************************
     const [errores, setErrores] = useState()
+    const { id } = useParams();
+    const [modoEditar, setModoEditar] = useState(false)
 
     // *******************************  INICIALIZANDO LOS FORMULARIOS **************************************
     const formularioInicialVacantes = {
@@ -21,6 +25,17 @@ export const FormularioVacante = ({ guardarVacante }) => {
 
     // **********************************  OBTENER DATOS DE LA BD  *****************************************
     // ********************************** USE EFFECTS **********************************
+    useEffect(() => {
+        const obtenerVacanteEditar = async () => {
+            if (id) {
+                const vacanteEditar = await VacanteService.getById(id)
+                setModoEditar(true)
+                setDatosFormularioVacantes(vacanteEditar.data)
+            }
+        }
+        obtenerVacanteEditar()
+    }, [id])
+
     // **********************************  MANEJADORES DE CAMBIOS  *****************************************
     const actualizarCamposVacante = (e) => {
         const { name, value } = e.target;
@@ -37,7 +52,6 @@ export const FormularioVacante = ({ guardarVacante }) => {
                 [name]: value
             }))
         }
-
     }
 
     // ******************************* FUNCIONES GENERALES *******************************************
@@ -50,13 +64,33 @@ export const FormularioVacante = ({ guardarVacante }) => {
         if (validarCampos("vacantes") === 0)
             return
         try {
-            const vacantesGuardar = {
-                ...datosFormularioVacantes,
-                usuario: '1'
+
+
+            let respuesta = null
+            let mensaje = ""
+            if (modoEditar) {
+                const vacantesActualizar = {
+                    nombre: datosFormularioVacantes.nombre,
+                    descripcion: datosFormularioVacantes.descripcion,
+                    detalle: datosFormularioVacantes.detalle,
+                    fechaPublicacion: datosFormularioVacantes.fechaPublicacion,
+                    activo: datosFormularioVacantes.activo,
+                    id: datosFormularioVacantes.id,
+                    usuario: "1"
+                }
+                respuesta = await actualizarVacante(id, vacantesActualizar)
+                mensaje = "Vacante actualizado con exito."
+            } else {
+                const vacantesGuardar = {
+                    ...datosFormularioVacantes,
+                    usuario: "1"
+                }
+                respuesta = await guardarVacante(vacantesGuardar)
+                mensaje = "Vacante agregado con exito."
             }
-            const respuesta = await guardarVacante(vacantesGuardar)
+
             if (respuesta.ok == false) {
-                if(!respuesta.errores.response)
+                if (!respuesta.errores.response)
                     mostrarError("Error de conexion. Inténtalo más tarde.")
                 else
                     mostrarError(respuesta.errores)
@@ -65,9 +99,9 @@ export const FormularioVacante = ({ guardarVacante }) => {
 
             setErrores({})
             setDatosFormularioVacantes(formularioInicialVacantes)
-            mostrarExito("Vacante agregado con exito.")
+            mostrarExito(mensaje)
         } catch (error) {
-            console.log("Ocurrio un error al guardar los datos: ", error)
+            console.error("Error al guardar los datos: ", error)
         }
     }
 
@@ -92,7 +126,7 @@ export const FormularioVacante = ({ guardarVacante }) => {
 
         return 1;
     }
-    
+
     // **************************  FUNCIONES PARA MOSTRAR MENSAJES AL USUARIO  *****************************
     const mostrarAlerta = (config) => {
         return Swal.fire({
@@ -129,8 +163,6 @@ export const FormularioVacante = ({ guardarVacante }) => {
             text: mensaje,
             icon: 'success',
             confirmButtonText: 'Aceptar',
-        }).then(() => {
-            navigate('/menuSolicitar')
         });
     };
 
@@ -220,9 +252,14 @@ export const FormularioVacante = ({ guardarVacante }) => {
                                 {errores?.activo && <div style={{ color: 'red' }}>{errores?.activo}</div>}
                             </div>
 
-                            <button className="btn btn-secondary">
+                            {modoEditar ? (
+                                <button className="btn btn-outline-primary" >
+                                    Editar
+                                </button>
+                            ) : (<button className="btn btn-secondary">
                                 Guardar
-                            </button>
+                            </button>)
+                            }
                         </form>
                     </div>
                 </div>
