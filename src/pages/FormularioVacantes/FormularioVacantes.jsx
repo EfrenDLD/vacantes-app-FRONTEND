@@ -253,7 +253,7 @@ export const FormularioVacante = ({ guardarVacante, actualizarVacante }) => {
                             </div>
 
                             {modoEditar ? (
-                                <button className="btn btn-primary" >
+                                <button className="btn btn-outline-primary" >
                                     Editar
                                 </button>
                             ) : (<button className="btn btn-secondary">

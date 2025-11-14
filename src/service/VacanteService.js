@@ -2,6 +2,15 @@ import axiosInstance from '../api/axiosConfig';
 
 const API_URL = '/vacantes';
 
+const getAll = async () => {
+  try {
+    const response = await axiosInstance.get(API_URL);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || 'Error al obtener vacantes';
+  }
+};
+
 const create = async (params) => {
   try {
     const response = await axiosInstance.post(API_URL, params);
@@ -20,15 +29,12 @@ const update = async (id, vacante) => {
   }
 }
 
-/**
- * Obtener todas las vacantes
- */
-const getAll = async () => {
+const cambiarEstado = async (id, activo) => {
   try {
-    const response = await axiosInstance.get(API_URL);
-    return response;
+    const response = await axiosInstance.put(`${API_URL}/${id}/estado`, { activo });
+    return response.data;
   } catch (error) {
-    throw error.response?.data || 'Error al obtener vacantes';
+    throw error.response?.data || error.message;
   }
 };
 
@@ -88,6 +94,7 @@ export default {
   create,
   update,
   getAll,
+  cambiarEstado,
   getById,
   buscar,
   getActivas,

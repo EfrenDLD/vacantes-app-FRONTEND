@@ -1,40 +1,55 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Swal from "sweetalert2";
-import "../../styles/usuarioAdministrador/ListarVacantesAdministrador.css";
-import VacanteService from "../../service/VacanteService";
+import { PaginacionVacantes } from "../../components/paginacionVacantes/paginacionVacantes";
+import { NavAdmin } from "../../components/NavAdmin/NavAdmin";
+import vacanteService from "../../service/VacanteService";
 import { useNavigate } from "react-router-dom";
-
 
 export const ListarVacantesAdministrador = () => {
   const [vacantes, setVacantes] = useState([]);
-  const navigate = useNavigate();
+  const [currentPageActivas, setCurrentPageActivas] = useState(1);
+  const [currentPageInactivas, setCurrentPageInactivas] = useState(1);
+  const vacantesPorPagina = 8;
 
+  const navigate = useNavigate();
 
   useEffect(() => {
     obtenerVacantes();
   }, []);
 
+  const verDetalles = (id) => {
+    navigate(`/detalleVacante/${id}`);
+  };
   const obtenerVacantes = async () => {
     try {
-      const response = await VacanteService.getAll();
-      // Transformar los datos al formato esperado por la tabla
-      const vacantesFormateadas = response.data.map(v => ({
-        id: v.id,
-        nombre: v.nombre,
-        fecha: v.fechaPublicacion,
+      const data = await vacanteService.getAll();
+      if (!Array.isArray(data)) {
+        setVacantes([]);
+        return;
+      }
+      const vacantesFormateadas = data.map(v => ({
+        ...v,
+        fecha: v.fechaPublicacion
+          ? new Date(v.fechaPublicacion).toLocaleDateString()
+          : "",
         estado: v.activo ? "Activa" : "Inactiva",
-        // Puedes agregar más campos si los necesitas
       }));
       setVacantes(vacantesFormateadas);
     } catch (error) {
-      console.error("Error al obtener las vacantes:", error);
-      // Opcional: setVacantes([]) o mostrar mensaje de error
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al obtener vacantes",
+        text: error.toString(),
+      });
     }
   };
 
+  // --- Funciones para cambiar estado y eliminar ---
   const handleCambiarEstado = async (vacante) => {
     const nuevoEstado = vacante.estado === "Activa" ? "Inactiva" : "Activa";
+    const activo = nuevoEstado === "Activa"; 
 
     const confirmacion = await Swal.fire({
       title: "¿Cambiar estado?",
@@ -48,15 +63,28 @@ export const ListarVacantesAdministrador = () => {
     });
 
     if (confirmacion.isConfirmed) {
-      setVacantes((prev) =>
-        prev.map((v) => (v.id === vacante.id ? { ...v, estado: nuevoEstado } : v))
-      );
-      Swal.fire({
-        icon: "success",
-        title: `Vacante ${nuevoEstado === "Activa" ? "activada" : "inactivada"} correctamente.`,
-        timer: 1800,
-        showConfirmButton: false,
-      });
+      try {
+        await vacanteService.cambiarEstado(vacante.id, activo);
+
+        setVacantes((prev) =>
+          prev.map((v) =>
+            v.id === vacante.id ? { ...v, estado: nuevoEstado } : v
+          )
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: `Vacante ${nuevoEstado === "Activa" ? "activada" : "desactivada"} correctamente.`,
+          timer: 1800,
+          showConfirmButton: false,
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error al cambiar el estado",
+          text: error.toString(),
+        });
+      }
     }
   };
 
@@ -89,20 +117,38 @@ export const ListarVacantesAdministrador = () => {
   };
 
   const handlerEditar = (vacante) => {
+
     navigate(`/formularioVacante/${vacante.id}`);
   };
 
+  // --- Filtrado ---
   const vacantesActivas = vacantes.filter((v) => v.estado === "Activa");
   const vacantesInactivas = vacantes.filter((v) => v.estado === "Inactiva");
 
-  const renderTabla = (lista, titulo) => (
-    <div className="panel panel-default my-4">
-      <div className="panel-heading p-2">
-        <h4 className="panel-title m-0">{titulo}</h4>
+  // --- Paginación ---
+  const totalPagesActivas = Math.ceil(vacantesActivas.length / vacantesPorPagina);
+  const totalPagesInactivas = Math.ceil(vacantesInactivas.length / vacantesPorPagina);
+
+  const inicioActivas = (currentPageActivas - 1) * vacantesPorPagina;
+  const inicioInactivas = (currentPageInactivas - 1) * vacantesPorPagina;
+
+  const vacantesActivasPaginadas = vacantesActivas.slice(
+    inicioActivas,
+    inicioActivas + vacantesPorPagina
+  );
+  const vacantesInactivasPaginadas = vacantesInactivas.slice(
+    inicioInactivas,
+    inicioInactivas + vacantesPorPagina
+  );
+
+  const renderTabla = (lista, titulo, currentPage, totalPages, onPageChange) => (
+    <div className="panel panel-default shadow-sm rounded p-3 mb-5 bg-white">
+      <div className="panel-heading mb-3 border-bottom pb-2">
+        <h4 className="panel-title text-secondary m-0">{titulo}</h4>
       </div>
-      <div className="panel-body p-3">
-        <table className="table table-striped">
-          <thead>
+      <div className="panel-body">
+        <table className="table table-striped table-hover align-middle">
+          <thead className="table-light">
             <tr>
               <th>ID</th>
               <th>Vacante</th>
@@ -119,24 +165,24 @@ export const ListarVacantesAdministrador = () => {
                   <td>{v.fecha}</td>
                   <td>
                     <button
-                      className="btn btn-secondary btn-sm me-2"
+                      className={`btn btn-sm me-2 ${v.estado === "Activa" ? "btn-outline-danger" : "btn-outline-success"
+                        }`}
                       onClick={() => handleCambiarEstado(v)}
                     >
                       {v.estado === "Activa" ? "Desactivar" : "Activar"}
                     </button>
-
-                    <button className="btn btn-secondary btn-sm me-2">
+                    <button className="btn btn-sm me-2 btn-outline-dark"
+                      onClick={() => verDetalles(v.id)}>
                       Ver Detalles
                     </button>
-
                     <button
-                      className="btn btn-danger btn-sm"
+                      className="btn btn-sm btn-outline-danger"
                       onClick={() => handleEliminar(v.id)}
                     >
                       Eliminar
                     </button>
                     <button
-                      className="btn btn-primary ms-2"
+                      className="btn btn-outline-primary ms-2"
                       onClick={() => handlerEditar(v)}
                     >
                       Editar
@@ -146,19 +192,44 @@ export const ListarVacantesAdministrador = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="text-center">No hay vacantes registradas.</td>
+                <td colSpan="4" className="text-center text-muted py-3">
+                  No hay vacantes registradas.
+                </td>
               </tr>
             )}
           </tbody>
         </table>
+
+        {totalPages > 1 && (
+          <PaginacionVacantes
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+          />
+        )}
       </div>
     </div>
   );
 
   return (
-    <div className="container my-4">
-      {renderTabla(vacantesActivas, "Vacantes Activas")}
-      {renderTabla(vacantesInactivas, "Vacantes Inactivas")}
+    <div className="container my-5">
+      <NavAdmin />
+
+      {renderTabla(
+        vacantesActivasPaginadas,
+        "Vacantes Activas",
+        currentPageActivas,
+        totalPagesActivas,
+        setCurrentPageActivas
+      )}
+
+      {renderTabla(
+        vacantesInactivasPaginadas,
+        "Vacantes Inactivas",
+        currentPageInactivas,
+        totalPagesInactivas,
+        setCurrentPageInactivas
+      )}
     </div>
   );
 };
