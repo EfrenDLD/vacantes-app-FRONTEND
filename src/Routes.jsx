@@ -9,6 +9,7 @@ import { PaginacionVacantes } from "./components/paginacionVacantes/paginacionVa
 import { DetalleVacante } from "./pages/DetallesVacantes/DetallesVacantes.jsx";
 
 import Login from "./Login/login.jsx";
+import Principal from "./pages/paginaPrincipal/principal.jsx";
 
 const AppRoutes = () => {
   return (
@@ -23,6 +24,7 @@ const AppRoutes = () => {
         <Route path="/paginacion" element={<PaginacionVacantes />} />
         <Route path="/listarVacantesAdministrador" element={<ListarVacantesAdministrador />} />
         <Route path="/detalleVacante/:id" element={<DetalleVacante />} />
+        <Route path="/principal" element={<Principal />} />
     </Routes>
   );
 };
