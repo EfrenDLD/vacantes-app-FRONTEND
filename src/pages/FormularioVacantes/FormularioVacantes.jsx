@@ -67,8 +67,8 @@ export const FormularioVacante = ({ guardarVacante, actualizarVacante }) => {
 
 
             let respuesta = null
+            let mensaje = ""
             if (modoEditar) {
-                console.log("ACTUALIZAR: ID: ", id, " DATOS: ", datosFormularioVacantes)
                 const vacantesActualizar = {
                     nombre: datosFormularioVacantes.nombre,
                     descripcion: datosFormularioVacantes.descripcion,
@@ -78,15 +78,15 @@ export const FormularioVacante = ({ guardarVacante, actualizarVacante }) => {
                     id: datosFormularioVacantes.id,
                     usuario: "1"
                 }
-                console.log("vacante actualizar: ", vacantesActualizar)
                 respuesta = await actualizarVacante(id, vacantesActualizar)
+                mensaje = "Vacante actualizado con exito."
             } else {
                 const vacantesGuardar = {
                     ...datosFormularioVacantes,
-                    usuario: '1'
+                    usuario: "1"
                 }
-                console.log("GUARDAR: ", vacantesGuardar)
                 respuesta = await guardarVacante(vacantesGuardar)
+                mensaje = "Vacante agregado con exito."
             }
 
             if (respuesta.ok == false) {
@@ -99,9 +99,9 @@ export const FormularioVacante = ({ guardarVacante, actualizarVacante }) => {
 
             setErrores({})
             setDatosFormularioVacantes(formularioInicialVacantes)
-            mostrarExito("Vacante agregado con exito.")
+            mostrarExito(mensaje)
         } catch (error) {
-            console.log("Ocurrio un error al guardar los datos: ", error)
+            console.error("Error al guardar los datos: ", error)
         }
     }
 

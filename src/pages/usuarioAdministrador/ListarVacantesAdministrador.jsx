@@ -89,7 +89,6 @@ export const ListarVacantesAdministrador = () => {
   };
 
   const handlerEditar = (vacante) => {
-    console.log("vacante seleccionado", vacante)
     navigate(`/formularioVacante/${vacante.id}`);
   };
 
