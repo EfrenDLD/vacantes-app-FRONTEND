@@ -59,10 +59,6 @@ export default function Principal() {
 
   return (
     <div className="container">
-      <div className="masthead">
-        <NavAdmin />
-      </div>
-
       {/* Buscador visual (controlado) */}
       <div className="d-flex justify-content-end mb-3">
         <form className="d-flex" onSubmit={handleSearch}>
