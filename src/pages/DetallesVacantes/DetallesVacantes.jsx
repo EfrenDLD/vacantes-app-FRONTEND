@@ -41,7 +41,6 @@ export const DetalleVacante = () => {
     );
   }
 
-
   if (!vacante) {
     return (
       <div className="container my-4 text-center">
@@ -49,7 +48,6 @@ export const DetalleVacante = () => {
       </div>
     );
   }
-
 
   return (
     <div className="container my-4">
@@ -75,7 +73,16 @@ export const DetalleVacante = () => {
         </div>
       </div>
 
-      <footer className="footer mt-5 text-center">
+      <div className="text-center mt-4">
+        <button 
+          className="btn btn-primary"
+          onClick={() => window.history.back()}
+        >
+          Regresar
+        </button>
+      </div>
+
+      <footer className="footer mt-3 text-center">
         <p>&copy; 2025 My Company, Inc.</p>
       </footer>
     </div>

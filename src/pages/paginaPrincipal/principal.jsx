@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { NavAdmin } from '../../components/NavAdmin/NavAdmin';
 import vacanteService from '../../service/VacanteService';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Principal() {
   const [vacantes, setVacantes] = useState([]);
@@ -10,6 +12,13 @@ export default function Principal() {
 
   // estado para la búsqueda (valor del input)
   const [searchTerm, setSearchTerm] = useState('');
+
+
+  const navigate = useNavigate();
+
+  const verDetalles = (id) => {
+    navigate(`/detalleVacante/${id}`);
+  };
 
   // Obtener y guardar las 3 vacantes más recientes
   useEffect(() => {
@@ -109,7 +118,9 @@ export default function Principal() {
                   <p className="card-text text-justify" style={{ flexGrow: 1 }}>
                     {v.descripcion || 'Sin descripción disponible.'}
                   </p>
-                  <a href="#" className="btn btn-primary mt-2">Ver detalles &raquo;</a>
+                  <button className="btn btn-primary mt-2" onClick={() => verDetalles(v.id)} >
+                    Ver detalles &raquo;
+                  </button>
                   
                 </div>
               </div>
