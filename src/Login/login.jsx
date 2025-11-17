@@ -39,6 +39,9 @@ const Login = () => {
         text: `Hola, ${response.data.username} (${response.data.perfil})`,
       });
 
+      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("lastActivity", Date.now());
+
       navigate("/vacantes");
 
     } catch (error) {

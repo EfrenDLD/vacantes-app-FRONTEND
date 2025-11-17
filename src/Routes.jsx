@@ -9,6 +9,7 @@ import Login from "./Login/login.jsx";
 import { NavAdmin } from "./components/NavAdmin/NavAdmin.jsx";
 import { GestionFormularioVacantes } from "./pages/FormularioVacantes/GestionFormularioVacantes.jsx";
 import { ListarVacantesAdministrador } from "./pages/usuarioAdministrador/ListarVacantesAdministrador.jsx";
+import PrivateRoute from "./PrivateRoute.jsx";
 
 const AppRoutes = () => {
   return (
@@ -16,21 +17,36 @@ const AppRoutes = () => {
 
       {/* Rutas de visitante */}
       <Route element={<VisitanteLayout />}>
-        <Route path="/principal" element={<Principal />} />
+        <Route path="/" element={<Principal />} />
         <Route path="/acerca" element={<div>Acerca de la Empresa</div>} />
         <Route path="/vacantes" element={<Vacantes />} />
         <Route path="/detalleVacante/:id" element={<DetalleVacante />} />
       </Route>
 
       {/* Rutas de login */}
-      <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
 
       {/* Rutas de administrador */}
-      <Route path="/navAdmin" element={<NavAdmin />} />
-      <Route path="/listarVacantesAdministrador" element={<ListarVacantesAdministrador />} />
-      <Route path="/formularioVacante" element={<GestionFormularioVacantes />} />
-      <Route path="/formularioVacante/:id" element={<GestionFormularioVacantes />} />
+      <Route path="/navAdmin" element={
+        <PrivateRoute>
+          <NavAdmin />
+        </PrivateRoute>
+      } />
+      <Route path="/listarVacantesAdministrador" element={
+        <PrivateRoute>
+          <ListarVacantesAdministrador />
+        </PrivateRoute>
+      } />
+      <Route path="/formularioVacante" element={
+        <PrivateRoute>
+          <GestionFormularioVacantes />
+        </PrivateRoute>
+      } />
+      <Route path="/formularioVacante/:id" element={
+        <PrivateRoute>
+          <GestionFormularioVacantes />
+        </PrivateRoute>
+      } />
 
       {/* Catch all route */}
       <Route path="*" element={<Error404 />} />
