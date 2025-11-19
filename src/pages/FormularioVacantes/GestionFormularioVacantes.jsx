@@ -14,10 +14,23 @@ export const GestionFormularioVacantes =  () => {
         }
     }
 
+    const actualizarVacante = async (id, vacante) => {
+        try {
+            await VacanteService.update(id, vacante)
+            return {ok: true}
+        } catch (error) {
+            return {
+                ok: false,
+                errores: [error || "Error al actualizar al vacante"]
+            }
+        }
+    }
+
     return (
         <div>
             <FormularioVacante
                 guardarVacante = {guardarVacante}
+                actualizarVacante = {actualizarVacante}
             />
         </div>
     )

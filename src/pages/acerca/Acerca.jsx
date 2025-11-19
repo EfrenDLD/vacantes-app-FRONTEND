@@ -5,8 +5,7 @@ import { NavVisitante } from "../../components/NavAdmin/NavVisitante";
 export const Acerca = () => {
     return (
         <div className="container py-4">
-            {/* Nav */}
-            <NavVisitante />
+       
 
             {/* Hero */}
             <div className="p-4 p-md-5 mb-5 mt-4 text-bg-light rounded-3">

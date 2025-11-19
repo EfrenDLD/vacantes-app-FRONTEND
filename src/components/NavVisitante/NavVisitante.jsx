@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export const NavAdmin = () => {
+export const NavVisitante = () => {
     const navigate = useNavigate();
 
     return (
@@ -16,25 +16,25 @@ export const NavAdmin = () => {
                 <div className="col-4">
                     <button
                         className="btn w-100"
-                        onClick={() => navigate("/formularioVacante")}
+                        onClick={() => navigate("/principal")}
                     >
-                        Crear Vacante
+                        Inicio
                     </button>
                 </div>
                 <div className="col-4">
                     <button
                         className="btn w-100"
-                        onClick={() => navigate("/listarVacantesAdministrador")}
+                        onClick={() => navigate("/login")}
                     >
-                        Vacantes
+                        Administracion
                     </button>
                 </div>
                 <div className="col-4">
-                    <button 
+                    <button
                         className="btn w-100"
-                        onClick={() => navigate("/login")}
+                        onClick={() => navigate("/acerca")}
                     >
-                        Salir
+                        Acerca de
                     </button>
                 </div>
             </div>
