@@ -9,7 +9,7 @@ import Login from "./Login/login.jsx";
 import { NavAdmin } from "./components/NavAdmin/NavAdmin.jsx";
 import { GestionFormularioVacantes } from "./pages/FormularioVacantes/GestionFormularioVacantes.jsx";
 import { ListarVacantesAdministrador } from "./pages/usuarioAdministrador/ListarVacantesAdministrador.jsx";
-import PrivateRoute from "./PrivateRoute.jsx";
+import PrivateRoute from "./components/ProtectRoutes/PrivateRoute.jsx";
 
 const AppRoutes = () => {
   return (
@@ -36,7 +36,7 @@ const AppRoutes = () => {
         <PrivateRoute>
           <ListarVacantesAdministrador />
         </PrivateRoute>
-      } />
+      } /> 
       <Route path="/formularioVacante" element={
         <PrivateRoute>
           <GestionFormularioVacantes />

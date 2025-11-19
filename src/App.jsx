@@ -3,8 +3,11 @@ import { useEffect } from 'react';
 import './App.css'
 import AppRoutes from './Routes.jsx';
 import Swal from "sweetalert2";
+import { useSessionTimeout } from "./components/Session/useSessionTimeout.jsx";
+
 
 function App() {
+  useSessionTimeout();
   useEffect(() => {
     const handleActivity = () => {
       localStorage.setItem("lastActivity", Date.now());
