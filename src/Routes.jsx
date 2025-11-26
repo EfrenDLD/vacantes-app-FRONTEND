@@ -7,9 +7,11 @@ import { VisitanteLayout } from "./layouts/VisitanteLayout.jsx";
 import { Error404 } from "./pages/Error404/Error404.jsx";
 import Login from "./Login/login.jsx";
 import { NavAdmin } from "./components/NavAdmin/NavAdmin.jsx";
+import { NavVisitante } from "./components/NavAdmin/NavVisitante.jsx";
 import { GestionFormularioVacantes } from "./pages/FormularioVacantes/GestionFormularioVacantes.jsx";
 import { ListarVacantesAdministrador } from "./pages/usuarioAdministrador/ListarVacantesAdministrador.jsx";
-import PrivateRoute from "./PrivateRoute.jsx";
+import PrivateRoute from "./components/ProtectRoutes/PrivateRoute.jsx";
+import { Acerca } from "./pages/acerca/Acerca.jsx";
 import { FormularioUsuario } from "./pages/FormularioUsuario/formularioUsuario.jsx"
 
 const AppRoutes = () => {
@@ -19,9 +21,10 @@ const AppRoutes = () => {
       {/* Rutas de visitante */}
       <Route element={<VisitanteLayout />}>
         <Route path="/" element={<Principal />} />
-        <Route path="/acerca" element={<div>Acerca de la Empresa</div>} />
+        <Route path="/acerca" element={<Acerca/>} />
         <Route path="/vacantes" element={<Vacantes />} />
         <Route path="/detalleVacante/:id" element={<DetalleVacante />} />
+        <Route path="/NavVisitante" element={<NavVisitante />} />
       </Route>
 
       {/* Rutas de login */}
@@ -37,7 +40,7 @@ const AppRoutes = () => {
         <PrivateRoute>
           <ListarVacantesAdministrador />
         </PrivateRoute>
-      } />
+      } /> 
       <Route path="/formularioVacante" element={
         <PrivateRoute>
           <GestionFormularioVacantes />
@@ -57,6 +60,7 @@ const AppRoutes = () => {
       {/* Catch all route */}
       <Route path="*" element={<Error404 />} />
 
+        <Route path="/acerca" element={<Acerca />} />
     </Routes>
   );
 };

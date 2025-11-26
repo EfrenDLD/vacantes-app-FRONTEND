@@ -39,10 +39,19 @@ const Login = () => {
         text: `Hola, ${response.data.username} (${response.data.perfil})`,
       });
 
-      localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("lastActivity", Date.now());
+      // Guardar sesión
+      sessionStorage.setItem("isAuthenticated", "true");
+      sessionStorage.setItem("user", JSON.stringify({
+        username: response.data.username,
+        perfil: response.data.perfil
+      }));
+      sessionStorage.setItem("lastActivity", Date.now());
+      sessionStorage.setItem("lastActivity", Date.now());
 
-      navigate("/vacantes");
+
+      // Redirigir al panel admin
+      navigate("/navAdmin");
+
 
     } catch (error) {
       console.log("ERROR RESPONSE:", error.response); // <- ¡Y esto!
