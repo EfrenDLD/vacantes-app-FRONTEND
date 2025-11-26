@@ -1,14 +1,7 @@
 import { NavAdmin } from "../../components/NavAdmin/NavAdmin";
-import { useState } from "react";
+import { ListaUsuarios } from "./ListadoUsuarios"; 
 
 export const FormularioUsuario = () => {
-
-    // Lista estática
-    const [usuarios] = useState([
-        { id: 1, nombre: "Carlos" },
-        { id: 2, nombre: "María" },
-        { id: 3, nombre: "Luis" }
-    ]);
 
     return (
         <div className="w-100">
@@ -59,54 +52,8 @@ export const FormularioUsuario = () => {
 
                 </div>
             </div>
-
-            {/* LISTA DE USUARIOS */}
-            <div className="container mt-5">
-                <div className="card">
-                    <div className="card-header">
-                        <h5 className="mb-0">Lista de Usuarios</h5>
-                    </div>
-
-                    <div className="card-body p-0">
-                        <table className="table table-striped mb-0">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre</th>
-                                    
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                {usuarios.map((u) => (
-                                    <tr key={u.id}>
-                                        <td>{u.id}</td>
-                                        <td>{u.nombre}</td>
-                                        <td className="text-nowrap" style={{ width: "150px" }}>
-                                            <button
-                                                className="btn btn-primary btn-sm me-1"
-                                                style={{ padding: "3px 8px" }}
-                                                type="button"
-                                            >
-                                                Editar
-                                            </button>
-
-                                            <button
-                                                className="btn btn-danger btn-sm"
-                                                style={{ padding: "3px 8px" }}
-                                                type="button"
-                                            >
-                                                Eliminar
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
+            
+            <ListaUsuarios />
 
         </div>
     );
