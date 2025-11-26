@@ -25,8 +25,6 @@ const AppRoutes = () => {
         <Route path="/vacantes" element={<Vacantes />} />
         <Route path="/detalleVacante/:id" element={<DetalleVacante />} />
         <Route path="/NavVisitante" element={<NavVisitante />} />
-        <Route path="/listaVacante" element={<ListaVacantes />} />
-
       </Route>
 
       {/* Rutas de login */}
