@@ -10,6 +10,7 @@ import { NavAdmin } from "./components/NavAdmin/NavAdmin.jsx";
 import { GestionFormularioVacantes } from "./pages/FormularioVacantes/GestionFormularioVacantes.jsx";
 import { ListarVacantesAdministrador } from "./pages/usuarioAdministrador/ListarVacantesAdministrador.jsx";
 import PrivateRoute from "./PrivateRoute.jsx";
+import { FormularioUsuario } from "./pages/FormularioUsuario/formularioUsuario.jsx"
 
 const AppRoutes = () => {
   return (
@@ -45,6 +46,11 @@ const AppRoutes = () => {
       <Route path="/formularioVacante/:id" element={
         <PrivateRoute>
           <GestionFormularioVacantes />
+        </PrivateRoute>
+      } />
+      <Route path="/crearUsuario" element={
+        <PrivateRoute>
+          <FormularioUsuario />
         </PrivateRoute>
       } />
 
