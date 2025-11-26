@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function Principal() {
+  const [vacantesAll, setVacantesAll] = useState([]);
   const [vacantes, setVacantes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -20,15 +21,17 @@ export default function Principal() {
     navigate(`/detalleVacante/${id}`);
   };
 
-  // Obtener y guardar las 3 vacantes más recientes
+  // Obtener todas las vacantes y calcular las 3 más recientes
   useEffect(() => {
     const fetchRecientes = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await vacanteService.getActivas(); // asume response.data es array de vacantes
-        const data = response.data ?? response;
-        const recientes = (data || [])
+        const response = await vacanteService.getActivas();
+        const data = response?.data ?? response ?? [];
+        const all = Array.isArray(data) ? data : [];
+        setVacantesAll(all);
+        const recientes = all
           .slice()
           .sort((a, b) => new Date(b.fechaPublicacion).getTime() - new Date(a.fechaPublicacion).getTime())
           .slice(0, 3);
@@ -37,6 +40,7 @@ export default function Principal() {
         console.error('Error al cargar vacantes:', err);
         setError('No se pudieron cargar las vacantes.');
         setVacantes([]);
+        setVacantesAll([]);
       } finally {
         setLoading(false);
       }
@@ -54,9 +58,9 @@ export default function Principal() {
     }
   };
 
-  // Filtrar las 3 vacantes recientes por el término de búsqueda (si hay)
+  // Si hay texto de búsqueda, buscar en todas las vacantes; si no, mostrar solo las 3 recientes
   const visibleVacantes = searchTerm.trim()
-    ? vacantes.filter(v =>
+    ? (vacantesAll || []).filter(v =>
         (v.nombre ?? v.titulo ?? '').toLowerCase().includes(searchTerm.trim().toLowerCase())
       )
     : vacantes;

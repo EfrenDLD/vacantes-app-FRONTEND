@@ -9,14 +9,14 @@ export const NavVisitante = () => {
             </div>
             <div className="row">
                 <div className="col">
-                    <h3 className="text-start">My Company - Administración</h3>
+                    <h3 className="text-start">My Company </h3>
                 </div>
             </div>
             <div className="row bg-light mt-2 rounded-2">
                 <div className="col-4">
                     <button
                         className="btn w-100"
-                        onClick={() => navigate("/principal")}
+                        onClick={() => navigate("/")}
                     >
                         Inicio
                     </button>
