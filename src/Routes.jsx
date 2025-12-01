@@ -13,6 +13,7 @@ import { ListarVacantesAdministrador } from "./pages/usuarioAdministrador/Listar
 import PrivateRoute from "./components/ProtectRoutes/PrivateRoute.jsx";
 import { Acerca } from "./pages/acerca/Acerca.jsx";
 import { FormularioUsuario } from "./pages/FormularioUsuario/formularioUsuario.jsx"
+import { GestionFormularioUsuario } from "./pages/FormularioUsuario/GestionFormularioUsuario.jsx";
 
 const AppRoutes = () => {
   return (
@@ -53,7 +54,7 @@ const AppRoutes = () => {
       } />
       <Route path="/crearUsuario" element={
         <PrivateRoute>
-          <FormularioUsuario />
+          <GestionFormularioUsuario />
         </PrivateRoute>
       } />
 
