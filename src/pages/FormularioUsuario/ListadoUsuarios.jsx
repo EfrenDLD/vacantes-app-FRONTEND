@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import usuarioService from "../../service/UsuarioService";
+import Swal from "sweetalert2";
 
 export const ListaUsuarios = () => {
-
     const [usuarios, setUsuarios] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -13,11 +13,43 @@ export const ListaUsuarios = () => {
     const cargarUsuarios = async () => {
         try {
             const data = await usuarioService.getAll();
-            setUsuarios(data);   
+            setUsuarios(data);
         } catch (error) {
             console.error("Error al cargar usuarios:", error);
         } finally {
             setLoading(false);
+        }
+    };
+    
+    const handleEliminar = async (id) => {
+        const confirmacion = await Swal.fire({
+            title: "¿Eliminar usuario?",
+            text: "Esta acción no se puede deshacer.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+        });
+
+        if (confirmacion.isConfirmed) {
+            try {
+                await usuarioService.deleteById(id);
+                cargarUsuarios()
+                Swal.fire({
+                    icon: "success",
+                    title: "Usuario eliminado correctamente.",
+                    timer: 1800,
+                    showConfirmButton: false,
+                });
+            } catch (error) {
+                console.error("Error al eliminar usuario:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "No se pudo eliminar el usuario",
+                });
+            }
         }
     };
 
@@ -67,6 +99,7 @@ export const ListaUsuarios = () => {
                                                 className="btn btn-danger btn-sm"
                                                 style={{ padding: "3px 8px" }}
                                                 type="button"
+                                                onClick={() => handleEliminar(u.id)}
                                             >
                                                 Eliminar
                                             </button>
@@ -77,7 +110,6 @@ export const ListaUsuarios = () => {
                         </table>
                     )}
                 </div>
-
             </div>
         </div>
     );
