@@ -1,7 +1,46 @@
+import Swal from "sweetalert2";
 import { NavAdmin } from "../../components/NavAdmin/NavAdmin";
-import { ListaUsuarios } from "./ListadoUsuarios"; 
+import { ListaUsuarios } from "./ListadoUsuarios";
+import { useState } from "react";
+import usuarioService from "../../service/UsuarioService";
 
 export const FormularioUsuario = () => {
+
+    const [form, setForm] = useState({
+        nombre: "",
+        email: "",
+        username: "",
+        contrasenia: "",  // ✔ correcto
+        perfil: "ADMIN",
+        estatus: "ACTIVO"
+    });
+
+
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async () => {
+        try {
+            console.log("Payload enviado:", form);
+
+            await usuarioService.create(form);
+
+            Swal.fire({
+                icon: "success",
+                title: "Usuario creado correctamente",
+                timer: 1500,
+                showConfirmButton: false
+            });
+
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error al crear usuario",
+                text: error.response?.data || "Revise los datos"
+            });
+        }
+    };
 
     return (
         <div className="w-100">
@@ -18,32 +57,36 @@ export const FormularioUsuario = () => {
                         <form>
 
                             <div className="mb-3">
-                                <label htmlFor="nombre" className="form-label fw-bolder">
-                                    Nombre de usuario
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="nombre"
-                                    name="nombre"
-                                    placeholder="Escriba el nombre del usuario"
-                                />
+                                <label className="form-label fw-bolder">Nombre</label>
+                                <input type="text" className="form-control" name="nombre" onChange={handleChange} />
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="password" className="form-label fw-bolder">
-                                    Contraseña
-                                </label>
-                                <input
-                                    type="password"
-                                    className="form-control"
-                                    id="password"
-                                    name="password"
-                                    placeholder="Escriba la contraseña"
-                                />
+                                <label className="form-label fw-bolder">Email</label>
+                                <input type="email" className="form-control" name="email" onChange={handleChange} />
                             </div>
 
-                            <button className="btn btn-secondary" type="button">
+                            <div className="mb-3">
+                                <label className="form-label fw-bolder">Usuario</label>
+                                <input type="text" className="form-control" name="username" onChange={handleChange} />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label fw-bolder">Contraseña</label>
+                                <input type="password" className="form-control" name="contrasenia" onChange={handleChange} />
+                            </div>
+
+                            {/* 🔥 Perfil ya no se muestra, pero se envía como ADMIN automáticamente */}
+
+                            <div className="mb-3">
+                                <label className="form-label fw-bolder">Estatus</label>
+                                <select className="form-select" name="estatus" onChange={handleChange}>
+                                    <option value="ACTIVO">ACTIVO</option>
+                                    <option value="INACTIVO">INACTIVO</option>
+                                </select>
+                            </div>
+
+                            <button className="btn btn-secondary" type="button" onClick={handleSubmit}>
                                 Guardar
                             </button>
 
@@ -52,7 +95,7 @@ export const FormularioUsuario = () => {
 
                 </div>
             </div>
-            
+
             <ListaUsuarios />
 
         </div>
