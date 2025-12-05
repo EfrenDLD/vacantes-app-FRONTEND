@@ -4,6 +4,8 @@ import { ListaUsuarios } from "./ListadoUsuarios";
 import { useState } from "react";
 import usuarioService from "../../service/UsuarioService";
 
+// Componente principal para crear un usuario.
+// Aquí se podrían agregar funciones de validación, edición y manejo de formulario.
 export const FormularioUsuario = () => {
 
     const [form, setForm] = useState({
@@ -44,6 +46,8 @@ export const FormularioUsuario = () => {
 
     return (
         <div className="w-100">
+
+            {/* Barra de navegación del administrador */}
             <NavAdmin />
 
             <div className="d-flex justify-content-center">
@@ -54,8 +58,12 @@ export const FormularioUsuario = () => {
                     </div>
 
                     <div className="card-body">
+
+                        {/* Formulario para registrar un usuario.
+                           Aquí se pueden conectar funciones como onChange, validaciones o envío al backend. */}
                         <form>
 
+                            {/* Campo para el nombre del usuario */}
                             <div className="mb-3">
                                 <label className="form-label fw-bolder">Nombre</label>
                                 <input type="text" className="form-control" name="nombre" onChange={handleChange} />
@@ -71,12 +79,13 @@ export const FormularioUsuario = () => {
                                 <input type="text" className="form-control" name="username" onChange={handleChange} />
                             </div>
 
+                            {/* Campo para la contraseña */}
                             <div className="mb-3">
                                 <label className="form-label fw-bolder">Contraseña</label>
                                 <input type="password" className="form-control" name="contrasenia" onChange={handleChange} />
                             </div>
 
-                            {/* 🔥 Perfil ya no se muestra, pero se envía como ADMIN automáticamente */}
+                            {/* Perfil ya no se muestra, pero se envía como ADMIN automáticamente */}
 
                             <div className="mb-3">
                                 <label className="form-label fw-bolder">Estatus</label>
@@ -90,6 +99,10 @@ export const FormularioUsuario = () => {
                                 Guardar
                             </button>
 
+                            {/* Aquí podría agregarse:
+                                - Botón de limpiar formulario
+                                - Botón de cancelar y regresar
+                                - Indicador de carga mientras se guarda */}
                         </form>
                     </div>
 
