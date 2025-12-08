@@ -4,3 +4,45 @@
   border-color:gray;
   border-radius: 1cap;
 }
+
+.menu-3puntos {
+  background: transparent !important;
+  border: none !important;
+  font-size: 26px;         
+  font-weight: bold;       
+  color: black !important;  
+  padding: 0 6px;
+  cursor: pointer;
+}
+
+.menu-3puntos:hover {
+  color: #000 !important;   
+}
+
+.menu-3puntos:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.dropdown-menu-custom {
+  background-color: #fff !important; 
+  border: 1px solid #000 !important; 
+  border-radius: 6px;
+  padding: 6px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.dropdown-menu-custom .dropdown-item {
+  background: inherit !important;
+  color: #000 !important;
+  padding: 8px 14px;
+  font-size: 14px;
+}
+
+.dropdown-menu-custom .dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.1) !important; 
+}
+
+.dropdown-menu-custom .dropdown-item:active {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
