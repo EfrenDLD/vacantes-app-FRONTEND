@@ -5,6 +5,7 @@ import { PaginacionVacantes } from "../../components/paginacionVacantes/paginaci
 import { NavAdmin } from "../../components/NavAdmin/NavAdmin";
 import vacanteService from "../../service/VacanteService";
 import { useNavigate } from "react-router-dom";
+import "../../styles/FormularioVacantesStyle/Vacantes.css";
 
 export const ListarVacantesAdministrador = () => {
 
@@ -23,9 +24,7 @@ export const ListarVacantesAdministrador = () => {
   // Se ejecuta al cargar el componente para traer las vacantes
   useEffect(() => {
     obtenerVacantes();
-    // Aquí puedes agregar un intervalo para refrescar automáticamente:
-    // const interval = setInterval(() => obtenerVacantes(), 30000);
-    // return () => clearInterval(interval);
+    
   }, []);
 
   // Redirección a detalles
@@ -173,83 +172,122 @@ export const ListarVacantesAdministrador = () => {
   );
 
   // Render reutilizable para ambas tablas
-  const renderTabla = (lista, titulo, currentPage, totalPages, onPageChange) => (
+   const renderTabla = (lista, titulo, currentPage, totalPages, onPageChange) => (
     <div className="panel panel-default shadow-sm rounded p-3 mb-5 bg-white">
 
-      {/* Título de la sección */}
       <div className="panel-heading mb-3 border-bottom pb-2">
         <h4 className="panel-title text-secondary m-0">{titulo}</h4>
       </div>
 
       <div className="panel-body">
 
-        {/* Tabla de vacantes */}
         <table className="table table-striped table-hover align-middle">
           <thead className="table-light">
             <tr>
               <th>ID</th>
               <th>Vacante</th>
-              <th>Publicado</th>
+              <th className="d-none d-md-table-cell">Publicado</th>
               <th>Acciones</th>
             </tr>
           </thead>
 
           <tbody>
             {lista.length > 0 ? (
-
               lista.map((v) => (
                 <tr key={v.id}>
                   <td>{v.id}</td>
                   <td>{v.nombre}</td>
-                  <td>{v.fecha}</td>
+                  <td className="d-none d-md-table-cell">{v.fecha}</td>
 
-                  <td>
-                    {/* Cambiar estado */}
-                    <button
-                      className={`btn btn-sm me-2 ${
-                        v.estado === "Activa"
-                          ? "btn-outline-danger"
-                          : "btn-outline-success"
-                      }`}
-                      onClick={() => handleCambiarEstado(v)}
-                    >
-                      {v.estado === "Activa" ? "Desactivar" : "Activar"}
-                    </button>
+                  <td className="text-center">
 
-                    {/* Ver detalles */}
-                    <button
-                      className="btn btn-sm me-2 btn-outline-dark"
-                      onClick={() => verDetalles(v.id)}
-                    >
-                      Ver Detalles
-                    </button>
+                    {/* BOTONES NORMALES EN PANTALLAS GRANDES */}
+                    <div className="d-none d-md-block">
+                      <button
+                        className={`btn btn-sm me-2 ${
+                          v.estado === "Activa"
+                            ? "btn-outline-danger"
+                            : "btn-outline-success"
+                        }`}
+                        onClick={() => handleCambiarEstado(v)}
+                      >
+                        {v.estado === "Activa" ? "Desactivar" : "Activar"}
+                      </button>
 
-                    {/* Eliminar */}
-                    <button
-                      className="btn btn-sm btn-outline-danger"
-                      onClick={() => handleEliminar(v.id)}
-                    >
-                      Eliminar
-                    </button>
+                      <button
+                        className="btn btn-sm me-2 btn-outline-dark"
+                        onClick={() => verDetalles(v.id)}
+                      >
+                        Ver Detalles
+                      </button>
 
-                    {/* Editar */}
-                    <button
-                      className="btn btn-outline-primary ms-2"
-                      onClick={() => handlerEditar(v)}
-                    >
-                      Editar
-                    </button>
+                      <button
+                        className="btn btn-sm btn-outline-danger me-2"
+                        onClick={() => handleEliminar(v.id)}
+                      >
+                        Eliminar
+                      </button>
 
-                    {/* Aquí podrías agregar nuevas funciones, por ejemplo:
-                       - Clonar vacante
-                       - Ver postulaciones
-                       - Exportar detalles
-                       - Historial de cambios
-                    */}
+                      <button
+                        className="btn btn-sm btn-outline-primary"
+                        onClick={() => handlerEditar(v)}
+                      >
+                        Editar
+                      </button>
+                    </div>
+
+                    {/* MENÚ RESPONSIVO DE 3 PUNTOS (SIN FLECHA) */}
+                    <div className="dropdown d-md-none">
+                      <button
+                        className="menu-3puntos"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                      >
+                        ⋮
+                      </button>
+
+                      <ul className="dropdown-menu dropdown-menu-custom">
+                        <li>
+                          <button
+                            className="dropdown-item"
+                            onClick={() => handleCambiarEstado(v)}
+                          >
+                            {v.estado === "Activa" ? "Desactivar" : "Activar"}
+                          </button>
+                        </li>
+
+                        <li>
+                          <button
+                            className="dropdown-item"
+                            onClick={() => verDetalles(v.id)}
+                          >
+                            Ver detalles
+                          </button>
+                        </li>
+
+                        <li>
+                          <button
+                            className="dropdown-item text-danger"
+                            onClick={() => handleEliminar(v.id)}
+                          >
+                            Eliminar
+                          </button>
+                        </li>
+
+                        <li>
+                          <button
+                            className="dropdown-item"
+                            onClick={() => handlerEditar(v)}
+                          >
+                            Editar
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+
                   </td>
                 </tr>
               ))
-
             ) : (
               <tr>
                 <td colSpan="4" className="text-center text-muted py-3">
@@ -260,7 +298,6 @@ export const ListarVacantesAdministrador = () => {
           </tbody>
         </table>
 
-        {/* Paginación */}
         {totalPages > 1 && (
           <PaginacionVacantes
             currentPage={currentPage}
@@ -276,7 +313,6 @@ export const ListarVacantesAdministrador = () => {
     <div className="container my-5">
       <NavAdmin />
 
-      {/* Tabla de vacantes activas */}
       {renderTabla(
         vacantesActivasPaginadas,
         "Vacantes Activas",
@@ -285,7 +321,6 @@ export const ListarVacantesAdministrador = () => {
         setCurrentPageActivas
       )}
 
-      {/* Tabla de vacantes inactivas */}
       {renderTabla(
         vacantesInactivasPaginadas,
         "Vacantes Inactivas",
