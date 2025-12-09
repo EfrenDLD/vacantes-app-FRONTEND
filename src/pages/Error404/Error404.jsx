@@ -12,7 +12,7 @@ export const Error404 = () => {
             </p>
 
             <div className="error-buttons">
-                <button className="btn btn-primary" onClick={() => navigate("/principal")}>
+                <button className="btn btn-primary" onClick={() => navigate("/")}>
                     Ir al inicio
                 </button>
 

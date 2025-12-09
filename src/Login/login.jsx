@@ -50,7 +50,7 @@ const Login = () => {
 
 
       // Redirigir al panel admin
-      navigate("/navAdmin");
+      navigate("/listarVacantesAdministrador");
 
 
     } catch (error) {
