@@ -3,6 +3,15 @@ import { useNavigate } from "react-router-dom";
 export const NavAdmin = () => {
     const navigate = useNavigate();
 
+    const handleSalir = () => {
+        // Borrar sesión
+        sessionStorage.clear();
+
+        // Redirigir al login
+        navigate("/login");
+    };
+
+
     return (
         <div className="container ">
             <div className="d-flex align-items-top">
@@ -30,9 +39,9 @@ export const NavAdmin = () => {
                     </button>
                 </div>
                 <div className="col-4">
-                    <button 
+                    <button
                         className="btn w-100"
-                        onClick={() => navigate("/login")}
+                        onClick={handleSalir}
                     >
                         Salir
                     </button>
